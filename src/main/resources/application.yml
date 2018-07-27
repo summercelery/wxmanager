@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: log
   datasource:
     name: springboot
     url: jdbc:mysql://127.0.0.1:3306/springboot?useSSL=true
@@ -13,6 +15,13 @@ spring:
     database: mysql
     show-sql: true
     hibernate:
+#     自动创建、更新、验证数据库结构
       ddl-auto: update
+
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: springboot.entity
+
+
 
 
