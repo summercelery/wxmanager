@@ -20,6 +20,7 @@ import springboot.service.UserService;
 import springboot.util.Md5Util;
 import springboot.util.UUIDUtil;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.security.NoSuchAlgorithmException;
@@ -37,11 +38,15 @@ public class UserController {
      * 账号密码登陆
      */
     @PostMapping("login")
-    public Result login(@NotBlank(message = "账号不能为空")String LoginName,@NotBlank(message = "密码不能为空")String password, @RequestParam(required = false,defaultValue = "true") Boolean rememberMe, @RequestParam(required = false)String code) {
+    public Result login(
+            @NotBlank(message = "账号不能为空")String LoginName,
+            @NotBlank(message = "密码不能为空")String password,
+            @RequestParam(required = false,defaultValue = "true") Boolean rememberMe)
+    {
 
         logger.debug(LoginName+"正在登陆........");
 
-        CustomerAuthenticationToken token = new CustomerAuthenticationToken(user.getLoginName(), user.getPassword(), rememberMe);
+        CustomerAuthenticationToken token = new CustomerAuthenticationToken(LoginName, password, rememberMe);
         token.setLoginType("loginName");
         Subject currentSubject = SecurityUtils.getSubject();
         try {
@@ -52,7 +57,7 @@ public class UserController {
             return Result.fail("密码错误");
         }
 
-        return Result.ok();
+        return Result.ok(currentSubject.getPrincipal());
     }
 
     /**
@@ -64,9 +69,13 @@ public class UserController {
      */
     @PostMapping("phoneLogin")
     public Result phoneLogin(@Valid PhoneCode phone , BindingResult result , @RequestParam(required = false) Boolean rememberMe){
+
+        logger.debug(phone.getPhone()+"正在使用验证码登陆........");
+
         if(result.hasFieldErrors()){
             return Result.fail(result.getFieldError().getDefaultMessage());
         }
+
         User user = userService.findUserByPhone(phone.getPhone());
         if(null ==user ){
             return Result.fail("此手机号尚未注册");

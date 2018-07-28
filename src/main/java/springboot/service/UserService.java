@@ -15,17 +15,17 @@ public class UserService {
         return userMapper.insert(user);
     }
 
-    public User findUserByEmail(String email){
+    public User findUserByEmail(String email) {
         return userMapper.findUserByEmail(email);
     }
-    public User findUserByPhone(String phone){
+
+    public User findUserByPhone(String phone) {
         return userMapper.findUserByPhone(phone);
     }
-    public int countUserNumByPhone(String phone){
+
+    public int countUserNumByPhone(String phone) {
         return userMapper.countUserNumByPhone(phone);
     }
-
-
 
 
 }
