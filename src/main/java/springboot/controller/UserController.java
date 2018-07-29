@@ -1,5 +1,6 @@
 package springboot.controller;
 
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,15 +18,25 @@ import springboot.core.shiro.CustomerAuthenticationToken;
 import springboot.entity.PhoneCode;
 import springboot.entity.Result;
 import springboot.entity.User;
+import springboot.exception.LoginException;
+import springboot.service.PhoneCodeService;
 import springboot.service.UserService;
 import springboot.util.Md5Util;
 import springboot.util.UUIDUtil;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+
+import static springboot.constant.sessionConstant.VALIDATE_CODE_SESSION;
 
 @RestController
 public class UserController {
@@ -33,6 +45,14 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DefaultKaptcha defaultKaptcha;
+
+    @Autowired
+    private PhoneCodeService phoneCodeService;
+
+
 
     /**
      * 账号密码登陆
@@ -68,7 +88,10 @@ public class UserController {
      * @return
      */
     @PostMapping("phoneLogin")
-    public Result phoneLogin(@Valid PhoneCode phone , BindingResult result , @RequestParam(required = false) Boolean rememberMe){
+    public Result phoneLogin(
+            @Valid PhoneCode phone , BindingResult result ,
+            @RequestParam(required = false) Boolean rememberMe)
+    {
 
         logger.debug(phone.getPhone()+"正在使用验证码登陆........");
 
@@ -106,7 +129,10 @@ public class UserController {
      * @return
      */
     @PostMapping("register")
-    public Result register(@Valid PhoneCode phoneCode,BindingResult phoneResult,@Valid User user, BindingResult userResult) {
+    public Result register(
+            @Valid PhoneCode phoneCode,BindingResult phoneResult,
+            @Valid User user, BindingResult userResult)
+    {
 
         if (phoneResult.hasFieldErrors()) {
             return Result.fail(phoneResult.getFieldError().getDefaultMessage());
@@ -123,10 +149,10 @@ public class UserController {
         if(System.currentTimeMillis() > code.getExpireTime().getTime()){
             return Result.fail("验证码已过期");
         }
-
-        if (userService.countUserNumByLoginName(user.getLoginName()) >= 1) {
-            return Result.fail("该账号已被注册");
-        }
+//
+//        if (userService.countUserNumByLoginName(user.getLoginName()) >= 1) {
+//            return Result.fail("该账号已被注册");
+//        }
         if (userService.countUserNumByPhone(user.getPhone()) >= 1){
             return Result.fail("该手机号已被注册");
         }
@@ -149,6 +175,38 @@ public class UserController {
 
         return Result.fail("服务器异常");
 
+    }
+
+    /**
+     * 获取图片验证码
+     * @param request
+     * @param response
+     */
+    @GetMapping("captcha")
+    public void captcha(HttpServletRequest request, HttpServletResponse response){
+
+        String code = defaultKaptcha.createText();
+        SecurityUtils.getSubject().getSession().setAttribute(VALIDATE_CODE_SESSION,code);
+        BufferedImage image = defaultKaptcha.createImage(code);
+
+        response.setDateHeader("Expires", 0);
+
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+
+        response.addHeader("Cache-Control", "post-check=0, pre-check=0");
+
+        response.setHeader("Pragma", "no-cache");
+
+        response.setContentType("image/jpeg");
+
+        try {
+            ServletOutputStream out = response.getOutputStream();
+            ImageIO.write(image, "jpg", out);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequiresRoles("管理")

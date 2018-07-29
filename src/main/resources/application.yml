@@ -3,7 +3,8 @@ server:
 
 spring:
   profiles:
-    active: log
+    active: log,redis
+
   datasource:
     name: springboot
     url: jdbc:mysql://127.0.0.1:3306/springboot?useSSL=true
@@ -11,6 +12,10 @@ spring:
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      stat-view-servlet:
+        login-username: druid
+        login-password: 123456
   jpa:
     database: mysql
     show-sql: true

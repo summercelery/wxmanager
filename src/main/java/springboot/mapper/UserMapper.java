@@ -18,7 +18,6 @@ public interface UserMapper{
     @Select("select * from user where phone = #{phone}")
     User findUserByPhone(String phone);
 
-    @ResultMap("BaseResultMap")
     @Select("select count(1) from user where phone = #{phone}")
     Integer countUserNumByPhone(String phone);
 
