@@ -7,7 +7,7 @@ import springboot.entity.Role;
 
 import java.util.List;
 
-@Mapper
+
 public interface RoleMapper {
 
     @ResultMap("BaseResultMap")

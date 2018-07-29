@@ -46,6 +46,17 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!--Jedis-->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+		<!--spring2.0集成redis所需common-pool2-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>2.5.0</version>
+		</dependency>
 		<!--thymeleaf-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -103,21 +114,12 @@
 			<groupId>com.github.penggle</groupId>
 			<artifactId>kaptcha</artifactId>
 			<version>2.3.2</version>
-	</dependency>
-		<!--Jedis-->
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<version>2.8.1</version>
 		</dependency>
-		<!--spring2.0集成redis所需common-pool2-->
+		<!--使用redis存储session-->
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-pool2</artifactId>
-			<version>2.5.0</version>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
 		</dependency>
-
-
 
 
 	</dependencies>

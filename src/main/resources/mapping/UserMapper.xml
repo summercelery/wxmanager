@@ -29,7 +29,7 @@
     delete from user
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="springboot.createEntity.User">
+  <insert id="insert" parameterType="springboot.entity.User">
     insert into user (id, create_date, email, 
       is_delete, last_login_date, name, 
       password, phone)
@@ -37,7 +37,7 @@
       #{isDelete,jdbcType=BIT}, #{lastLoginDate,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="springboot.createEntity.User">
+  <insert id="insertSelective" parameterType="springboot.entity.User">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -92,7 +92,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="springboot.createEntity.User">
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.entity.User">
     update user
     <set>
       <if test="createDate != null">
@@ -119,7 +119,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="springboot.createEntity.User">
+  <update id="updateByPrimaryKey" parameterType="springboot.entity.User">
     update user
     set create_date = #{createDate,jdbcType=TIMESTAMP},
       email = #{email,jdbcType=VARCHAR},

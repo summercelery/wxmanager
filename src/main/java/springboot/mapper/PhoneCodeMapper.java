@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import springboot.entity.PhoneCode;
 
-@Mapper
+
 public interface PhoneCodeMapper {
 
     @ResultMap("BaseResultMap")

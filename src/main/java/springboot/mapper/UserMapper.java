@@ -3,7 +3,6 @@ package springboot.mapper;
 import org.apache.ibatis.annotations.*;
 import springboot.entity.User;
 
-@Mapper
 public interface UserMapper{
 
     @ResultMap("BaseResultMap")

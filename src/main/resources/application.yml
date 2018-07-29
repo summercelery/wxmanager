@@ -24,7 +24,9 @@ spring:
       ddl-auto: update
 
 mybatis:
+# Mapper文件存放的位置
   mapper-locations: classpath:mapping/*.xml
+# 实体类所在的包，这个时候会自动取对应包中不包括包名的简单类名作为包括包名的别名
   type-aliases-package: springboot.entity
 
 
