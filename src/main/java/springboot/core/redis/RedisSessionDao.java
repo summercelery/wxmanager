@@ -29,7 +29,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
         Serializable sessionId = this.generateSessionId(session);
         this.assignSessionId(session, sessionId);
 
-        jedisService.setHash(sessionId.toString(),MapUtil.ObjectToMap(session),REDIS_SESSION_DB,REDIS_SESSION_EXPIRE);
+        jedisService.setHash(sessionId.toString(),MapUtil.objectToMap(session),REDIS_SESSION_DB,REDIS_SESSION_EXPIRE);
 
         return sessionId;
     }
@@ -52,7 +52,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
     @Override
     public void update(Session session) throws UnknownSessionException {
         if(jedisService.existKey(session.getId().toString(),REDIS_SESSION_DB)){
-            jedisService.setHash(session.getId().toString(),MapUtil.ObjectToMap(session),REDIS_SESSION_DB,REDIS_SESSION_EXPIRE);
+            jedisService.setHash(session.getId().toString(),MapUtil.objectToMap(session),REDIS_SESSION_DB,REDIS_SESSION_EXPIRE);
         }
 
     }

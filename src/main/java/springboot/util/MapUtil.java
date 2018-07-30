@@ -12,11 +12,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * map与对象的转换，将对象放置入jedis中使用
+ */
 public class MapUtil {
 
     private static Logger logger = LoggerFactory.getLogger(MapUtil.class);
 
-    public static Map<String, String> ObjectToMap(Object obj) {
+    public static Map<String, String> objectToMap(Object obj) {
 
         if (obj == null) {
             return null;
@@ -34,7 +37,7 @@ public class MapUtil {
 
                 String key = property.getName();
                 // 过滤class属性
-                if (!key.equals("class")) {
+                if (!"class".equals(key)) {
                     NotToMap notToMap = null;
                     try {
                         notToMap = obj.getClass().getDeclaredField(key).getAnnotation(NotToMap.class);

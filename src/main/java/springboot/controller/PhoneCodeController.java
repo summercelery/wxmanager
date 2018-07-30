@@ -88,7 +88,7 @@ public class PhoneCodeController {
         phoneCode.setType("ad");
         phoneCodeService.createPhoneCode(phoneCode);
 
-        jedisService.setHash(phoneCode.getId(), MapUtil.ObjectToMap(phoneCode), REDIS_CLOCK_PHONE_DB, REDIS_PHONE_EXPIRE);
+        jedisService.setHash(phoneCode.getId(), MapUtil.objectToMap(phoneCode), REDIS_CLOCK_PHONE_DB, REDIS_PHONE_EXPIRE);
         return Result.ok();
     }
 

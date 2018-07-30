@@ -31,6 +31,8 @@ public class UserDaoTest {
 //        list.add(role);
 //        user.setRoleList(list);
 //        userMapper.insert(user);
+        User user = new User();
+        System.out.println(user.getId());
 
 
         User user1 = userMapper.findUserById("2222");
