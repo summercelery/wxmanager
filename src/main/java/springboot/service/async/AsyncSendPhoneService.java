@@ -1,4 +1,4 @@
-package springboot.core.async;
+package springboot.service.async;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;

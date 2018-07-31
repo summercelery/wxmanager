@@ -8,7 +8,7 @@ import java.util.Date;
 @Table(name = "email")
 public class Email extends BaseEntity{
 
-    Email(){
+    public Email(){
         super();
         this.createDate = new Date();
         this.state = "create";

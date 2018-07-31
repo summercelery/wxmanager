@@ -7,7 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
-import springboot.core.async.AsyncSendPhoneService;
+import springboot.service.async.AsyncSendPhoneService;
 
 @SpringBootApplication
 //自动扫描包
