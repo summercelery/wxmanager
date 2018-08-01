@@ -2,6 +2,7 @@ package springboot.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import springboot.anno.NotToMap;
 import springboot.anno.Phone;
 
 import javax.persistence.*;
@@ -14,6 +15,14 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 public class User extends BaseEntity {
+
+    public User(){
+        super();
+        this.isDelete = false;
+        this.createDate = new Date();
+    }
+
+
 
     @NotBlank(message = "输入密码不能为空")
     private String password;
@@ -28,6 +37,7 @@ public class User extends BaseEntity {
 
     @JsonIgnore
     @Transient
+    @NotToMap
     private List<Role> roleList;
 
     private Date createDate;

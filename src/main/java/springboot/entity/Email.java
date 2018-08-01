@@ -1,5 +1,7 @@
 package springboot.entity;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Date;

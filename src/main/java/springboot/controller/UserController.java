@@ -1,5 +1,6 @@
 package springboot.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -9,19 +10,25 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import springboot.core.redis.JedisService;
 import springboot.core.shiro.CustomerAuthenticationToken;
+import springboot.entity.Email;
 import springboot.entity.PhoneCode;
 import springboot.entity.Result;
 import springboot.entity.User;
 import springboot.exception.LoginException;
+import springboot.service.EmailService;
 import springboot.service.PhoneCodeService;
 import springboot.service.UserService;
+import springboot.util.JsonUtil;
+import springboot.util.MapUtil;
 import springboot.util.Md5Util;
+import springboot.util.UUIDUtil;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -33,10 +40,14 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Map;
 
+import static springboot.constant.RedisConstant.REDIS_EMAIL_EXPIRE;
+import static springboot.constant.RedisConstant.REDIS_EMAIL_USER_DB;
 import static springboot.constant.sessionConstant.VALIDATE_CODE_SESSION;
 
 @RestController
+@RequestMapping("user")
 public class UserController {
 
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -49,6 +60,18 @@ public class UserController {
 
     @Autowired
     private PhoneCodeService phoneCodeService;
+
+    @Autowired
+    private EmailService emailServer;
+
+    @Autowired
+    private JedisService jedisService;
+
+    @Autowired
+    private TemplateEngine templateEngine;
+
+    @Value("${spring.mail.username}")
+    private String sendAddress;
 
 
     /**
@@ -166,50 +189,61 @@ public class UserController {
 
     /**
      * 用户根据邮箱注册
-     *
-     * @param phoneCode
-     * @param phoneResult
-     * @param password
-     * @return
      */
     @PostMapping("emailRegister")
     public Result emailRegister(
-            @Valid PhoneCode phoneCode, BindingResult phoneResult,
-            @NotBlank(message = "密码不能为空") String password) {
+            @NotBlank(message = "邮箱不能为空")@javax.validation.constraints.Email(message = "邮箱格式不正确") @RequestParam(name = "email") String emailAddress,
+            @NotBlank(message = "密码不能为空") String password) throws NoSuchAlgorithmException, JsonProcessingException {
 
-        if (phoneResult.hasFieldErrors()) {
-            return Result.fail(phoneResult.getFieldError().getDefaultMessage());
+        if(emailServer.countNumByEmail(emailAddress) > 0){
+            return Result.fail("该邮箱已被注册");
         }
+        //激活参数与redis主键
+        String uuid = UUIDUtil.getUUID();
 
-        PhoneCode code = phoneCodeService.findPhoneCodeByPhoneAndCodeAndType(phoneCode.getPhone(), phoneCode.getCode(), "register");
-
-        if (null == code) {
-            return Result.fail("验证码错误");
-        }
-        if (System.currentTimeMillis() > code.getExpireTime().getTime()) {
-            return Result.fail("验证码已过期");
-        }
-        if (userService.countUserNumByPhone(phoneCode.getPhone()) >= 1) {
-            return Result.fail("该手机号已被注册");
-        }
         User user = new User();
-        user.setCreateDate(new Date());
-        user.setIsDelete(false);
-        try {
-            //userId作为加密盐
-            password = Md5Util.getMd5(password, user.getId());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return Result.fail("服务器异常");
-        }
+        password = Md5Util.getMd5(password, user.getId());
         user.setPassword(password);
-        if (1 == userService.createUser(user)) {
-            return Result.ok(user);
-        }
+        user.setEmail(emailAddress);
+        user.setName(emailAddress);
+        jedisService.setHash(uuid, MapUtil.objectToMap(user),REDIS_EMAIL_USER_DB,REDIS_EMAIL_EXPIRE);
+        Map m = MapUtil.objectToMap(user);
 
-        return Result.fail("服务器异常");
+        Email email = new Email();
+        email.setTitle("注册验证");
+        email.setSendAddress(sendAddress);
+        email.setReceiveAddress(emailAddress);
 
+        Context context = new Context();
+        context.setVariable("id",uuid);
+        String htmlContext = templateEngine.process("template/registerEmailTemplate",context);
+        email.setContent(htmlContext);
+        emailServer.createEmail(email);
+        emailServer.sendHtmlMail(email);
+
+        return Result.ok();
     }
+
+
+    /**
+     * 激活邮件注册的用户
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @GetMapping("active/{id}")
+    public Result activeEmail(@PathVariable String id) throws Exception {
+
+
+        Map<String,String> map = jedisService.getAllHash(id,REDIS_EMAIL_USER_DB);
+        if(null == map){
+            return Result.fail("激活链接已过期或错误，请在24小时内激活");
+        }
+        User user = MapUtil.mapToObject(map,User.class);
+        userService.createUser(user);
+        return Result.ok();
+    }
+
 
     /**
      * 查询手机号是否被注册
@@ -217,7 +251,7 @@ public class UserController {
      * @param phone
      * @return
      */
-    @PostMapping
+    @PostMapping("isPhoneRegister")
     public Result isPhoneRegister(String phone) {
         if (userService.countUserNumByPhone(phone) == 0) {
             return Result.ok();

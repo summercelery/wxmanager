@@ -29,7 +29,6 @@ public class MapUtil {
 
         try {
 
-
             BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
             PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
             for (PropertyDescriptor property : propertyDescriptors) {
@@ -42,15 +41,19 @@ public class MapUtil {
                     try {
                         notToMap = obj.getClass().getDeclaredField(key).getAnnotation(NotToMap.class);
                     }catch (NoSuchFieldException e){
-                        continue;
+                        if(!"id".equals(key)){
+                            continue;
+                        }
                     }
                     if (null == notToMap) {
                         Method getter = property.getReadMethod();
                         Object value = getter.invoke(obj);
-                        if((value instanceof String)){
-                            map.put(key, value.toString());
-                        }else{
-                            map.put(key,objectMapper.writeValueAsString(value));
+                        if(null != value){
+                            if((value instanceof String)){
+                                map.put(key, value.toString());
+                            }else{
+                                map.put(key,objectMapper.writeValueAsString(value));
+                            }
                         }
                     }
                 }
@@ -62,7 +65,7 @@ public class MapUtil {
 
     }
 
-    public static Object mapToObject(Map<String, String> map, Class<?> beanClass) throws Exception {
+    public static <T> T mapToObject(Map<String, String> map, Class<T> beanClass) throws Exception {
         if (map == null)
             return null;
 
@@ -86,6 +89,6 @@ public class MapUtil {
             }
         }
 
-        return obj;
+        return (T)obj;
     }
 }

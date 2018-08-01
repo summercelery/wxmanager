@@ -18,7 +18,7 @@ public class PhoneCodeService {
     }
 
     public int createPhoneCode(PhoneCode phoneCode){
-        return phoneCodeMapper.insert(phoneCode);
+        return phoneCodeMapper.insertSelective(phoneCode);
     }
 
     public PhoneCode findPhoneCodeById(String id){

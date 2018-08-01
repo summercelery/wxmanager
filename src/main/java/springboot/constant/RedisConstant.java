@@ -27,6 +27,12 @@ public class RedisConstant {
     //手机验证码过期时间 1小时
     public static final Integer REDIS_PHONE_EXPIRE = 3600;
 
+    //发送邮件后尚未激活的用户信息存放24小时
+    public static final Integer REDIS_EMAIL_EXPIRE = 24*60*60;
+
+    //redis 5号数据库存放 发送邮件后尚未激活的用户信息
+    public static final Integer REDIS_EMAIL_USER_DB = 5;
+
 
 
 }

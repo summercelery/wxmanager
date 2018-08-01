@@ -12,7 +12,7 @@ public class UserService {
     private UserMapper userMapper;
 
     public int createUser(User user) {
-        return userMapper.insert(user);
+        return userMapper.insertSelective(user);
     }
 
     public User findUserByEmail(String email) {

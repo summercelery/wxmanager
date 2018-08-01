@@ -6,26 +6,36 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 import springboot.entity.Email;
 import springboot.service.EmailService;
+import springboot.util.UUIDUtil;
 
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class AsyncSendEmailServiceTest {
 
-
-
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private TemplateEngine templateEngine;
 
     @Test
     public void receive() throws JsonProcessingException {
         Email email = new Email();
-        email.setContent("内容");
-        email.setReceiveAddress("123456");
+        Context context = new Context();
+        String uuid = UUIDUtil.getUUID();
+
+        context.setVariable("id",uuid);
+        String htmlContext = templateEngine.process("template/registerEmailTemplate",context);
+
+
+        email.setReceiveAddress("465184205@qq.com");
         email.setTitle("标题");
-        emailService.sendTextMail(email);
+        emailService.sendHtmlMail(email);
 
     }
 

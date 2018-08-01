@@ -9,8 +9,7 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-    BaseEntity()
-    {
+    BaseEntity() {
         this.id = UUIDUtil.getUUID();
     }
 
@@ -24,4 +23,5 @@ public abstract class BaseEntity {
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
     }
+
 }
