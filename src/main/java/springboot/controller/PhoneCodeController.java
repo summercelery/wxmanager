@@ -1,7 +1,7 @@
 package springboot.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import static springboot.constant.RedisConstant.*;
+import static springboot.constant.sessionConstant.PHONE_CODE_ID_SESSION;
+import static springboot.constant.sessionConstant.VALIDATE_CODE_SESSION;
 
 @RestController
 @RequestMapping("phonecode")
@@ -51,8 +53,15 @@ public class PhoneCodeController {
     @GetMapping("getCode")
     public Result getCode(
             @Phone @NotBlank(message = "手机号不能为空") String phone,
-            @NotBlank(message = "发送类型不能为空") String type
+            @NotBlank(message = "发送类型不能为空") String type,
+            @NotBlank(message = "验证码不能为空") String validateCode
     ) throws IOException {
+        Subject currentSubject = SecurityUtils.getSubject();
+
+        if(!validateCode.equals(currentSubject.getSession().getAttribute(VALIDATE_CODE_SESSION))){
+            return Result.fail("验证码错误");
+        }
+
         Integer userNum = userService.countUserNumByPhone(phone);
         if ("login".equals(type) && userNum < 1) {
             return Result.fail("该手机号尚未注册");
@@ -64,8 +73,11 @@ public class PhoneCodeController {
         if (jedisService.existKey(type + phone, REDIS_PHONE_COUNT_DOWN_DB)) {
             return Result.fail("60秒内请不要重复提交");
         }
+        PhoneCode phoneCode = phoneCodeService.createAndSendPhoneCode(phone,type);
+        //将成功发送的短信id放置入session中
+        currentSubject.getSession().setAttribute(PHONE_CODE_ID_SESSION,phoneCode.getId());
 
-        return createPhoneCode(phone, type);
+        return Result.ok();
 
     }
 
@@ -93,45 +105,5 @@ public class PhoneCodeController {
     }
 
 
-    /**
-     * 根据发送的验证码类型 发送并创建验证码
-     *
-     * @param phone
-     * @param type
-     * @return
-     */
-    private Result createPhoneCode(String phone, String type) throws IOException {
-
-        String code = String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
-
-        PhoneCode phoneCode = new PhoneCode();
-        phoneCode.setPhone(phone);
-        phoneCode.setType(type);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 5);
-        phoneCode.setExpireTime(calendar.getTime());
-        phoneCode.setCode(code);
-        phoneCode.setMessage("验证码为" + code);
-        if (1 == phoneCodeService.createPhoneCode(phoneCode)) {
-
-            //发送信息存入redis
-            //stringRedisTemplate.opsForValue().set(type+phone,phone,60, TimeUnit.SECONDS);
-            jedisService.setWithTimeAndIndex(type + phone, "1min mark", 60, REDIS_PHONE_COUNT_DOWN_DB);
-
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                phoneOverStock = jedisService.putMessage(REDIS_SEND_PHONE_DB, REDIS_1DB_KEY, mapper.writeValueAsString(phoneCode));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-                logger.error("json转换异常:" + phoneCode.getPhone());
-            }
-
-            //测试阶段向前端返回验证码
-            return Result.ok(phoneCode.getCode());
-        }
-
-        return Result.fail("服务器异常");
-    }
 
 }

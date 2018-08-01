@@ -1,64 +1,54 @@
 package springboot.service.async;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.RabbitHandler;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import springboot.core.redis.JedisService;
 import springboot.entity.PhoneCode;
-import springboot.service.PhoneCodeService;
+import springboot.mapper.PhoneCodeMapper;
+import springboot.util.JsonUtil;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
-import static springboot.constant.RedisConstant.REDIS_1DB_KEY;
-import static springboot.constant.RedisConstant.REDIS_SEND_PHONE_DB;
+import static springboot.constant.RabbitMQConstant.PHONE_CODE_QUEUE_NAME;
 
 /**
- * 异步调用短信发送接口线程
+ * 异步调用短信发送
  */
 @Service
+@RabbitListener(queues = PHONE_CODE_QUEUE_NAME)
 public class AsyncSendPhoneService {
 
     private static Logger logger = LoggerFactory.getLogger(AsyncSendPhoneService.class);
 
     @Autowired
-    private JedisService jedisService;
-    @Autowired
-    private PhoneCodeService phoneCodeService;
+    private PhoneCodeMapper phoneCodeMapper;
 
-    @Async
-    public void sendPhone(){
+    @RabbitHandler
+    public void sendPhone(String stringPhoneCode) {
         PhoneCode phoneCode = null;
+        try {
+            phoneCode = JsonUtil.jsonToObject(stringPhoneCode, PhoneCode.class);
+            if (phoneCode.getExpireTime().after(new Date())) {
+                //TODO 发送短信
+                phoneCode.setSendTime(new Date());
+                phoneCode.setState("success");
 
-        while (true){
-            List<String> message = jedisService.getMessage(REDIS_1DB_KEY,REDIS_SEND_PHONE_DB);
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                phoneCode = mapper.readValue(message.get(1), PhoneCode.class);
-
-                if(null !=phoneCode.getExpireTime() && System.currentTimeMillis() > phoneCode.getExpireTime().getTime()){
-                   phoneCode.setState("expire");
-                }else{
-                    //TODO 调用短信发送接口
-
-                    if(true){
-                        phoneCode.setState("success");
-                        phoneCode.setSendTime(new Date());
-                    }else{
-                        phoneCode.setState("fail");
-                    }
-
-                }
-
-                phoneCodeService.updatePhoneCode(phoneCode);
-                logger.debug(phoneCode.getPhone()+"已发送短信内容："+phoneCode.getMessage());
-            } catch (IOException e) {
-                e.printStackTrace();
-                logger.error("json转换错误");
+                logger.debug(phoneCode.getPhone() + "已发送短信内容：" + phoneCode.getMessage());
+            } else {
+                phoneCode.setState("expire");
+            }
+        } catch (IOException e) {
+            logger.debug("短信转换错误");
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally{
+            if (null != phoneCode) {
+                phoneCodeMapper.updateByPrimaryKeySelective(phoneCode);
             }
         }
     }

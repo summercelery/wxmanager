@@ -2,10 +2,12 @@ package springboot.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,7 @@ import java.util.Map;
 
 import static springboot.constant.RedisConstant.REDIS_EMAIL_EXPIRE;
 import static springboot.constant.RedisConstant.REDIS_EMAIL_USER_DB;
+import static springboot.constant.sessionConstant.PHONE_CODE_ID_SESSION;
 import static springboot.constant.sessionConstant.VALIDATE_CODE_SESSION;
 
 @RestController
@@ -155,34 +158,42 @@ public class UserController {
         if (phoneResult.hasFieldErrors()) {
             return Result.fail(phoneResult.getFieldError().getDefaultMessage());
         }
+        Session session = SecurityUtils.getSubject().getSession();
+        if(null != session.getAttribute(PHONE_CODE_ID_SESSION)){
 
-        PhoneCode code = phoneCodeService.findPhoneCodeByPhoneAndCodeAndType(phoneCode.getPhone(), phoneCode.getCode(), "register");
+            PhoneCode code = phoneCodeService.findPhoneCodeById(session.getAttribute(PHONE_CODE_ID_SESSION).toString());
+            if(!phoneCode.getPhone().equals(code.getPhone())){
+                return Result.fail("请输入正确的手机号");
+            }
 
-        if (null == code) {
-            return Result.fail("验证码错误");
-        }
-        if (System.currentTimeMillis() > code.getExpireTime().getTime()) {
-            return Result.fail("验证码已过期");
-        }
-        if (userService.countUserNumByPhone(phoneCode.getPhone()) >= 1) {
-            return Result.fail("该手机号已被注册");
-        }
-        User user = new User();
-        user.setCreateDate(new Date());
-        user.setIsDelete(false);
-        try {
-            //userId作为加密盐
-            password = Md5Util.getMd5(password, user.getId());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return Result.fail("服务器异常");
-        }
-        user.setPassword(password);
-        if (1 == userService.createUser(user)) {
-            return Result.ok(user);
-        }
+            if(code.getExpireTime().before(new Date())){
+                return Result.fail("验证码已过期");
+            }
+            if(!code.getCode().equals(phoneCode.getCode())){
+                return Result.fail("验证码错误");
+            }
+            if (userService.countUserNumByPhone(phoneCode.getPhone()) >= 1) {
+                return Result.fail("该手机号已被注册");
+            }
+            User user = new User();
+            user.setCreateDate(new Date());
+            user.setIsDelete(false);
+            user.setPhone(phoneCode.getPhone());
+            user.setName(phoneCode.getPhone());
+            try {
+                //userId作为加密盐
+                password = Md5Util.getMd5(password, user.getId());
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+                return Result.fail("服务器异常");
+            }
+            user.setPassword(password);
+            if (1 == userService.createUser(user)) {
+                return Result.ok(user);
+            }
 
-        return Result.fail("服务器异常");
+        }
+        return Result.fail("请获取短信");
 
     }
 
@@ -207,7 +218,6 @@ public class UserController {
         user.setEmail(emailAddress);
         user.setName(emailAddress);
         jedisService.setHash(uuid, MapUtil.objectToMap(user),REDIS_EMAIL_USER_DB,REDIS_EMAIL_EXPIRE);
-        Map m = MapUtil.objectToMap(user);
 
         Email email = new Email();
         email.setTitle("注册验证");

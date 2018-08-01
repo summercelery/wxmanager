@@ -13,16 +13,12 @@ import springboot.service.async.AsyncSendPhoneService;
 @SpringBootApplication
 //自动扫描包
 @MapperScan("springboot.mapper")
-@EnableAsync //启用异步任务支持
+//@EnableAsync //启用异步任务支持
 @EnableScheduling //启用定时任务支持
-//@EnableRedisHttpSession //启用redis作为session存储
+//@EnableRedisHttpSession //启用redis作为session存储(自动)
 public class SpringbootApplication {
 
 	public static void main(String[] args) {
-		ConfigurableApplicationContext context = SpringApplication.run(SpringbootApplication.class, args);
-
-		AsyncSendPhoneService asyncTaskService =context.getBean(AsyncSendPhoneService.class);
-		asyncTaskService.sendPhone();
-
+		SpringApplication.run(SpringbootApplication.class, args);
 	}
 }

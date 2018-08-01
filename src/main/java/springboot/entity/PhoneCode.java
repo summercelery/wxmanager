@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "phone_code")
-public class PhoneCode extends BaseEntity {
+public class  PhoneCode extends BaseEntity {
 
     public PhoneCode() {
         super();
@@ -20,7 +20,6 @@ public class PhoneCode extends BaseEntity {
         this.state = "create";
     }
 
-    @NotToMap
     @JsonIgnore
     //登陆类型:login 注册类型:register
     private String type;
@@ -31,24 +30,18 @@ public class PhoneCode extends BaseEntity {
     @NotBlank(message = "手机号不能为空")
     private String phone;
 
-    @NotToMap
     @JsonIgnore
     @NotBlank(message = "验证码不能为空")
     private String code;
 
-    @NotToMap
     @JsonIgnore
     private Date clockTime;
 
-    @NotToMap
     @JsonIgnore
     private Date createTime;
 
-    @NotToMap
-    @JsonIgnore
     private String state;
 
-    @NotToMap
     @JsonIgnore
     private Date sendTime;
 
