@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 import springboot.entity.Email;
 import springboot.mapper.EmailMapper;
 import springboot.util.JsonUtil;
-
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.util.Date;
-
 import static springboot.constant.RabbitMQConstant.EMAIL_QUEUE_NAME;
 
 @Service
@@ -30,7 +28,6 @@ public class AsyncSendEmailService {
 
     @Autowired
     private EmailMapper emailMapper;
-
 
     /**
      * 接收rabbitmq中的邮件信息并发送
@@ -60,8 +57,8 @@ public class AsyncSendEmailService {
         } catch (MailException e) {
             if (null != email) {
                 email.setState("fail");
+                log.warn("邮件发送异常" + email.getReceiveAddress());
             }
-            log.debug("邮件发送异常" + email.getReceiveAddress());
             e.printStackTrace();
         } catch (Exception e) {
             if (null != email) {
@@ -73,6 +70,5 @@ public class AsyncSendEmailService {
                 emailMapper.updateByPrimaryKeySelective(email);
             }
         }
-
     }
 }

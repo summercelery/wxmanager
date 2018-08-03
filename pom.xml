@@ -115,11 +115,11 @@
 			<artifactId>kaptcha</artifactId>
 			<version>2.3.2</version>
 		</dependency>
-		<!--使用redis存储session-->
-		<dependency>
-			<groupId>org.springframework.session</groupId>
-			<artifactId>spring-session-data-redis</artifactId>
-		</dependency>
+		<!--使用redis存储session (已由shiro手动实现)-->
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.session</groupId>-->
+			<!--<artifactId>spring-session-data-redis</artifactId>-->
+		<!--</dependency>-->
 		<!--邮件发送-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -130,9 +130,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.41</version>
+            <scope>test</scope>
+        </dependency>
 
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

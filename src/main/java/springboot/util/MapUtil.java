@@ -9,6 +9,10 @@ import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +29,6 @@ public class MapUtil {
             return null;
         }
         Map<String, String> map = new HashMap<String, String>();
-        ObjectMapper objectMapper = new ObjectMapper();
 
         try {
 
@@ -51,8 +54,13 @@ public class MapUtil {
                         if(null != value){
                             if((value instanceof String)){
                                 map.put(key, value.toString());
+                            }else if(value instanceof Date){
+
+                                map.put(key,DateUtil.getFormatString((Date) value));
+
                             }else{
-                                map.put(key,objectMapper.writeValueAsString(value));
+                                map.put(key,JsonUtil.objectToJson(value));
+
                             }
                         }
                     }
@@ -69,7 +77,6 @@ public class MapUtil {
         if (map == null)
             return null;
 
-        ObjectMapper objectMapper = new ObjectMapper();
         Object obj = beanClass.newInstance();
 
         BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
@@ -78,12 +85,16 @@ public class MapUtil {
 
             Method setter = property.getWriteMethod();
             if (setter != null) {
-                Object o = map.get(property.getName());
+                String o = map.get(property.getName());
                 if("java.lang.String".equals(property.getPropertyType().getTypeName())||"java.io.Serializable".equals(property.getPropertyType().getTypeName())){
                     setter.invoke(obj, o);
+                }else if ("java.util.Date".equals(property.getPropertyType().getTypeName())){
+                    if(null != o){
+                        setter.invoke(obj,DateUtil.getDateByString(o));
+                    }
                 }else{
                     if(null != o){
-                        setter.invoke(obj,objectMapper.readValue((String) map.get(property.getName()),property.getPropertyType()));
+                        setter.invoke(obj,JsonUtil.jsonToObject(o,property.getPropertyType()));
                     }
                 }
             }

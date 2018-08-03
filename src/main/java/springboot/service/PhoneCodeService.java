@@ -48,10 +48,6 @@ public class PhoneCodeService {
 
 
 
-    public PhoneCode findPhoneCodeByPhoneAndCodeAndType(String phone, String code, String type){
-        return phoneCodeMapper.findPhoneCodeByPhoneAndCodeAndType(phone,code,type);
-    }
-
     public int createPhoneCode(PhoneCode phoneCode){
         return phoneCodeMapper.insertSelective(phoneCode);
     }

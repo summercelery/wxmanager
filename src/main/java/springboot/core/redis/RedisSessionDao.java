@@ -29,7 +29,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
         Serializable sessionId = this.generateSessionId(session);
         this.assignSessionId(session, sessionId);
 
-        jedisService.setHash(sessionId.toString(),MapUtil.objectToMap(session),REDIS_SESSION_DB,REDIS_SESSION_EXPIRE);
+        jedisService.setHash(sessionId.toString(), MapUtil.objectToMap(session), REDIS_SESSION_DB, REDIS_SESSION_EXPIRE);
 
         return sessionId;
     }
@@ -37,13 +37,14 @@ public class RedisSessionDao extends AbstractSessionDAO {
     @Override
     protected Session doReadSession(Serializable sessionId) {
         Session session = null;
-        Map<String,String> sessonMap = jedisService.getAllHash(sessionId.toString(),REDIS_SESSION_DB);
+        Map<String, String> sessonMap = jedisService.getAllHash(sessionId.toString(), REDIS_SESSION_DB);
+
         try {
-            session = (Session) MapUtil.mapToObject(sessonMap,SimpleSession.class);
+            session = MapUtil.mapToObject(sessonMap, SimpleSession.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(null != session && null == session.getId()){
+        if (null != session && null == session.getId()) {
             return null;
         }
         return session;
@@ -51,16 +52,16 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
     @Override
     public void update(Session session) throws UnknownSessionException {
-        if(jedisService.existKey(session.getId().toString(),REDIS_SESSION_DB)){
-            jedisService.setHash(session.getId().toString(),MapUtil.objectToMap(session),REDIS_SESSION_DB,REDIS_SESSION_EXPIRE);
+        if (jedisService.existKey(session.getId().toString(), REDIS_SESSION_DB)) {
+            jedisService.setHash(session.getId().toString(), MapUtil.objectToMap(session), REDIS_SESSION_DB, REDIS_SESSION_EXPIRE);
         }
 
     }
 
     @Override
     public void delete(Session session) {
-        if(jedisService.existKey(session.getId().toString(),REDIS_SESSION_DB)){
-            jedisService.deleteKey(session.getId().toString(),REDIS_SESSION_DB);
+        if (jedisService.existKey(session.getId().toString(), REDIS_SESSION_DB)) {
+            jedisService.deleteKey(session.getId().toString(), REDIS_SESSION_DB);
         }
     }
 
