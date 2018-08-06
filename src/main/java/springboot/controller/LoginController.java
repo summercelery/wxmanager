@@ -3,7 +3,6 @@ package springboot.controller;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,13 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import springboot.core.shiro.CustomerAuthenticationToken;
 import springboot.entity.PhoneCode;
 import springboot.entity.Result;
-import springboot.entity.User;
 import springboot.exception.LoginException;
 import springboot.service.UserService;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-
-import static springboot.constant.sessionConstant.LOGIN_PHONE_CODE_ID_SESSION;
 
 @RestController
 @RequestMapping("login")
@@ -57,6 +53,7 @@ public class LoginController {
         } catch (IncorrectCredentialsException e) {
             return Result.fail("密码错误");
         }
+        logger.debug(loginName + "登陆成功........");
 
         return Result.ok(currentSubject.getPrincipal());
     }
@@ -73,13 +70,12 @@ public class LoginController {
     @PostMapping("phoneLogin")
     public Result phoneLogin(
             @Valid PhoneCode phone, BindingResult result,
-            @RequestParam(required = false,defaultValue = "false") Boolean rememberMe) {
-
-        logger.debug(phone.getPhone() + "正在使用手机验证码登陆........");
+            @RequestParam(required = false, defaultValue = "false") Boolean rememberMe) {
 
         if (result.hasFieldErrors()) {
             return Result.fail(result.getFieldError().getDefaultMessage());
         }
+        logger.debug(phone.getPhone() + "正在使用手机验证码登陆........");
 
         CustomerAuthenticationToken token = new CustomerAuthenticationToken(phone.getPhone(), phone.getCode(), rememberMe);
         token.setLoginType("phone");
@@ -94,8 +90,9 @@ public class LoginController {
         } catch (LoginException e) {
             return Result.fail(e.getMessage());
         }
+        logger.debug(phone.getPhone() + "正在登陆........");
 
-        return Result.ok(userService.findUserByPhone(phone.getPhone()));
+        return Result.ok(currentSubject.getPrincipal());
     }
 
 
