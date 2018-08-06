@@ -72,7 +72,7 @@ class EmailControllerTest {
         Map m = MapUtil.objectToMap(session);
 
 
-        String o = "[\"java.util.HashMap\",{\"user\":[\"springboot.entity.User\",{\"id\":\"8949072725f342139ad9b3b7451d1303\",\"name\":\"123\",\"email\":\"12346\",\"createDate\":[\"java.util.Date\",1533275155520],\"isDelete\":false}]}]";
+        String o = "[\"java.util.HashMap\",{\"org.apache.shiro.subject.support.DefaultSubjectContext_PRINCIPALS_SESSION_KEY\":[\"org.apache.shiro.subject.SimplePrincipalCollection\",{\"empty\":false,\"primaryPrincipal\":[\"springboot.entity.User\",{\"id\":\"9e2ee70e509a4a8a9734d932ea397cea\",\"password\":\"7f0930a2353e004e7f82175e76c2ebc1\",\"name\":\"18354226137\",\"phone\":\"18354226137\",\"createDate\":[\"java.util.Date\",\"2018-08-02 09:53:13.000\"],\"isDelete\":false}],\"realmNames\":[\"java.util.LinkedHashMap$LinkedKeySet\",[\"loginNameRealm\"]]}]}]";
         Map map1 = JsonUtil.jsonToObject(o,HashMap.class);
         User user1 = (User) map1.get("user");
         SimpleSession s = MapUtil.mapToObject(m,SimpleSession.class);

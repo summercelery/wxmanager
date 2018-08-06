@@ -22,7 +22,7 @@ public class EmailService {
 
 
     /**
-     * 将text邮件放置入RabbitMQ
+     * 将Html邮件放置入RabbitMQ
      *
      * @param mail
      * @throws JsonProcessingException

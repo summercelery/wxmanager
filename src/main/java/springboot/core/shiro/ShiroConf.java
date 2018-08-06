@@ -47,8 +47,8 @@ public class ShiroConf {
     }
 
     @Bean(name="sessionManager")
-    public DefaultWebSessionManager defaultWebSessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+    public ShiroSessionManager defaultWebSessionManager() {
+        ShiroSessionManager sessionManager = new ShiroSessionManager();
         sessionManager.setSessionDAO(redisSessionDAO());//如不想使用REDIS可注释此行
         Collection<SessionListener> sessionListeners = new ArrayList<>();
         sessionListeners.add(customSessionListener());

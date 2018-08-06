@@ -105,10 +105,11 @@ public class JedisService {
         return null;
     }
 
-    public String getValue(String key){
+    public String getValue(String key,Integer index){
         Jedis jedis = null;
         try{
             jedis = getResource();
+            jedis.select(index);
             return jedis.get(key);
         }catch (Exception e){
             e.printStackTrace();

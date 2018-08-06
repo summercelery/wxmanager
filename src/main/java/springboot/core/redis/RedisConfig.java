@@ -16,6 +16,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -67,6 +68,29 @@ public class RedisConfig extends CachingConfigurerSupport {
         return jedisPoolConfig;
     }
 
+    @Bean(name = "redisTemplate")
+    public RedisTemplate<String, Object> getRedisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new JdkSerializationRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer(Object.class));
+        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        return redisTemplate;
+    }
+
+    @Bean
+    public JedisConnectionFactory jedisConnectionFactory(){
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
+        jedisConnectionFactory.setHostName(host);
+        jedisConnectionFactory.setPort(port);
+        jedisConnectionFactory.setPassword(password);
+        jedisConnectionFactory.setTimeout(timeout);
+        jedisConnectionFactory.setPoolConfig(jedisPoolConfig());
+        jedisConnectionFactory.setUsePool(true);
+        jedisConnectionFactory.setDatabase(1);
+        return jedisConnectionFactory;
+    }
 
     public String getHost() {
         return host;

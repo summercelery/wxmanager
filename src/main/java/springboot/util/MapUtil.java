@@ -54,11 +54,13 @@ public class MapUtil {
                         if(null != value){
                             if((value instanceof String)){
                                 map.put(key, value.toString());
-                            }else if(value instanceof Date){
-
-                                map.put(key,DateUtil.getFormatString((Date) value));
-
-                            }else{
+                            }
+//                            else if(value instanceof Date){
+//
+//                                map.put(key,DateUtil.getFormatString((Date) value));
+//
+//                            }
+                            else{
                                 map.put(key,JsonUtil.objectToJson(value));
 
                             }
@@ -88,11 +90,13 @@ public class MapUtil {
                 String o = map.get(property.getName());
                 if("java.lang.String".equals(property.getPropertyType().getTypeName())||"java.io.Serializable".equals(property.getPropertyType().getTypeName())){
                     setter.invoke(obj, o);
-                }else if ("java.util.Date".equals(property.getPropertyType().getTypeName())){
-                    if(null != o){
-                        setter.invoke(obj,DateUtil.getDateByString(o));
-                    }
-                }else{
+                }
+//                else if ("java.util.Date".equals(property.getPropertyType().getTypeName())){
+//                    if(null != o){
+//                        setter.invoke(obj,DateUtil.getDateByString(o));
+//                    }
+//                }
+                else{
                     if(null != o){
                         setter.invoke(obj,JsonUtil.jsonToObject(o,property.getPropertyType()));
                     }
