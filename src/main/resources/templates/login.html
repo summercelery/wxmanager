@@ -111,11 +111,7 @@
                     },
                     success : function(data) {
                         formloading = false;
-                        alert("1");
-
                         if (data.success == true) {
-                            alert("2");
-
                             window.location.href = '/index';
                         } else {
                             layer.msg(data.message);
