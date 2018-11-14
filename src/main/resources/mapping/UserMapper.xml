@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="springboot.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="springboot.entity.User">
+<mapper namespace="springboot.wxcms.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.User">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="email" jdbcType="VARCHAR" property="email" />
@@ -11,7 +11,7 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
 
-    <collection property="roleList" column="id" javaType="java.util.List" ofType="springboot.entity.Role" select="springboot.mapper.RoleMapper.findRolesByUserId">
+    <collection property="roleList" column="id" javaType="java.util.List" ofType="springboot.wxcms.entity.Role" select="springboot.wxcms.mapper.RoleMapper.findRolesByUserId">
       <id column="id" jdbcType="VARCHAR" property="id" />
       <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
     </collection>
@@ -29,7 +29,7 @@
     delete from user
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="springboot.entity.User">
+  <insert id="insert" parameterType="springboot.wxcms.entity.User">
     insert into user (id, create_date, email, 
       is_delete, last_login_date, name, 
       password, phone)
@@ -37,7 +37,7 @@
       #{isDelete,jdbcType=BIT}, #{lastLoginDate,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="springboot.entity.User">
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.User">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -92,7 +92,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="springboot.entity.User">
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.User">
     update user
     <set>
       <if test="createDate != null">
@@ -119,7 +119,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="springboot.entity.User">
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.User">
     update user
     set create_date = #{createDate,jdbcType=TIMESTAMP},
       email = #{email,jdbcType=VARCHAR},

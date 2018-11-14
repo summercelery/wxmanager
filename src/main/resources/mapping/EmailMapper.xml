@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="springboot.mapper.EmailMapper">
-  <resultMap id="BaseResultMap" type="springboot.entity.Email">
+<mapper namespace="springboot.wxcms.mapper.EmailMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.Email">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
@@ -24,7 +24,7 @@
     delete from email
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="springboot.entity.Email">
+  <insert id="insert" parameterType="springboot.wxcms.entity.Email">
     insert into email (id, content, create_date, 
       receive_address, send_address, send_date, 
       state, title)
@@ -32,7 +32,7 @@
       #{receiveAddress,jdbcType=VARCHAR}, #{sendAddress,jdbcType=VARCHAR}, #{sendDate,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="springboot.entity.Email">
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.Email">
     insert into email
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -87,7 +87,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="springboot.entity.Email">
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.Email">
     update email
     <set>
       <if test="content != null">
@@ -114,7 +114,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="springboot.entity.Email">
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.Email">
     update email
     set content = #{content,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},

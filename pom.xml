@@ -6,7 +6,7 @@
 	<groupId>lgd</groupId>
 	<artifactId>springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>springboot</name>
 	<description>Demo project for Spring Boot</description>
@@ -126,13 +126,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.41</version>
-            <scope>test</scope>
-        </dependency>
-
+		<!--httpclient-->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.5</version>
+		</dependency>
+		<!--pagehelper分页插件-->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper</artifactId>
+			<version>5.1.4</version>
+		</dependency>
 
     </dependencies>
 
@@ -154,8 +159,23 @@
 					<verbose>true</verbose>
 				</configuration>
 			</plugin>
+
+			<!--加载lib下的jar包-->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+					<compilerArguments>
+						<extdirs>src\main\resources\lib</extdirs>
+					</compilerArguments>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
+
 
 
 

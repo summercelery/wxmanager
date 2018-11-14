@@ -12,12 +12,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-import springboot.anno.Phone;
-import springboot.entity.Email;
-import springboot.service.EmailService;
-import springboot.util.JsonUtil;
-import springboot.util.UUIDUtil;
+import springboot.wxcms.service.EmailService;
+import springboot.core.util.JsonUtil;
 import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
