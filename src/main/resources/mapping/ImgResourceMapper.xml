@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.wxcms.mapper.ImgResourceMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.ImgResource">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="flag" jdbcType="INTEGER" property="flag" />
+    <result column="http_url" jdbcType="VARCHAR" property="httpUrl" />
+    <result column="media_id" jdbcType="VARCHAR" property="mediaId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="size" jdbcType="INTEGER" property="size" />
+    <result column="true_name" jdbcType="VARCHAR" property="trueName" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_time, flag, http_url, media_id, name, size, true_name, type, update_time, 
+    url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from img_resource
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from img_resource
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="springboot.wxcms.entity.ImgResource">
+    insert into img_resource (id, create_time, flag, 
+      http_url, media_id, name, 
+      size, true_name, type, 
+      update_time, url)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{flag,jdbcType=INTEGER}, 
+      #{httpUrl,jdbcType=VARCHAR}, #{mediaId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{size,jdbcType=INTEGER}, #{trueName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{url,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.ImgResource">
+    insert into img_resource
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="flag != null">
+        flag,
+      </if>
+      <if test="httpUrl != null">
+        http_url,
+      </if>
+      <if test="mediaId != null">
+        media_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="size != null">
+        size,
+      </if>
+      <if test="trueName != null">
+        true_name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flag != null">
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="httpUrl != null">
+        #{httpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaId != null">
+        #{mediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=INTEGER},
+      </if>
+      <if test="trueName != null">
+        #{trueName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.ImgResource">
+    update img_resource
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flag != null">
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="httpUrl != null">
+        http_url = #{httpUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaId != null">
+        media_id = #{mediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        size = #{size,jdbcType=INTEGER},
+      </if>
+      <if test="trueName != null">
+        true_name = #{trueName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.ImgResource">
+    update img_resource
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      flag = #{flag,jdbcType=INTEGER},
+      http_url = #{httpUrl,jdbcType=VARCHAR},
+      media_id = #{mediaId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      size = #{size,jdbcType=INTEGER},
+      true_name = #{trueName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      url = #{url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

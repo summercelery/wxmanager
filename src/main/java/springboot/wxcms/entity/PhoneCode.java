@@ -17,7 +17,6 @@ public class  PhoneCode extends BaseEntity {
 
     public PhoneCode() {
         super();
-        this.createTime = new Date();
         this.state = "create";
     }
 
@@ -37,9 +36,6 @@ public class  PhoneCode extends BaseEntity {
 
     @JsonIgnore
     private Date clockTime;
-
-    @JsonIgnore
-    private Date createTime;
 
     private String state;
 

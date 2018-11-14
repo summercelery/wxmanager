@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 //自动扫描包
-@MapperScan("springboot.mapper")
+@MapperScan("springboot.wxcms.mapper")
 //@EnableAsync //启用异步任务支持
 @EnableScheduling //启用定时任务支持
 //@EnableRedisHttpSession //启用redis作为session存储(已由shiro具体实现)

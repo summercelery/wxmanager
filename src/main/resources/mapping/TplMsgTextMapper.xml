@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.wxcms.mapper.TplMsgTextMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.TplMsgText">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="base_id" jdbcType="BIGINT" property="baseId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="tpl_id" jdbcType="VARCHAR" property="tplId" />
+    <result column="wx_tpl" jdbcType="VARCHAR" property="wxTpl" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_time, base_id, content, title, tpl_id, wx_tpl
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tpl_msg_text
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tpl_msg_text
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="springboot.wxcms.entity.TplMsgText">
+    insert into tpl_msg_text (id, create_time, base_id, 
+      content, title, tpl_id, 
+      wx_tpl)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{baseId,jdbcType=BIGINT}, 
+      #{content,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{tplId,jdbcType=VARCHAR}, 
+      #{wxTpl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.TplMsgText">
+    insert into tpl_msg_text
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="baseId != null">
+        base_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="tplId != null">
+        tpl_id,
+      </if>
+      <if test="wxTpl != null">
+        wx_tpl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="baseId != null">
+        #{baseId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="tplId != null">
+        #{tplId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxTpl != null">
+        #{wxTpl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.TplMsgText">
+    update tpl_msg_text
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="baseId != null">
+        base_id = #{baseId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="tplId != null">
+        tpl_id = #{tplId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxTpl != null">
+        wx_tpl = #{wxTpl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.TplMsgText">
+    update tpl_msg_text
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      base_id = #{baseId,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      tpl_id = #{tplId,jdbcType=VARCHAR},
+      wx_tpl = #{wxTpl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

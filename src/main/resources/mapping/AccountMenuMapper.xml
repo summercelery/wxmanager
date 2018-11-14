@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.wxcms.mapper.AccountMenuMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.AccountMenu">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="event_type" jdbcType="VARCHAR" property="eventType" />
+    <result column="gid" jdbcType="BIGINT" property="gid" />
+    <result column="input_code" jdbcType="VARCHAR" property="inputCode" />
+    <result column="msg_id" jdbcType="VARCHAR" property="msgId" />
+    <result column="msg_type" jdbcType="VARCHAR" property="msgType" />
+    <result column="mtype" jdbcType="VARCHAR" property="mtype" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_time, event_type, gid, input_code, msg_id, msg_type, mtype, name, parent_id, 
+    parent_name, sort, url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from account_menu
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from account_menu
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="springboot.wxcms.entity.AccountMenu">
+    insert into account_menu (id, create_time, event_type, 
+      gid, input_code, msg_id, 
+      msg_type, mtype, name, 
+      parent_id, parent_name, sort, 
+      url)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{eventType,jdbcType=VARCHAR}, 
+      #{gid,jdbcType=BIGINT}, #{inputCode,jdbcType=VARCHAR}, #{msgId,jdbcType=VARCHAR}, 
+      #{msgType,jdbcType=VARCHAR}, #{mtype,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=BIGINT}, #{parentName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
+      #{url,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.AccountMenu">
+    insert into account_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="eventType != null">
+        event_type,
+      </if>
+      <if test="gid != null">
+        gid,
+      </if>
+      <if test="inputCode != null">
+        input_code,
+      </if>
+      <if test="msgId != null">
+        msg_id,
+      </if>
+      <if test="msgType != null">
+        msg_type,
+      </if>
+      <if test="mtype != null">
+        mtype,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="parentName != null">
+        parent_name,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eventType != null">
+        #{eventType,jdbcType=VARCHAR},
+      </if>
+      <if test="gid != null">
+        #{gid,jdbcType=BIGINT},
+      </if>
+      <if test="inputCode != null">
+        #{inputCode,jdbcType=VARCHAR},
+      </if>
+      <if test="msgId != null">
+        #{msgId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null">
+        #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="mtype != null">
+        #{mtype,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="parentName != null">
+        #{parentName,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.AccountMenu">
+    update account_menu
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="eventType != null">
+        event_type = #{eventType,jdbcType=VARCHAR},
+      </if>
+      <if test="gid != null">
+        gid = #{gid,jdbcType=BIGINT},
+      </if>
+      <if test="inputCode != null">
+        input_code = #{inputCode,jdbcType=VARCHAR},
+      </if>
+      <if test="msgId != null">
+        msg_id = #{msgId,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null">
+        msg_type = #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="mtype != null">
+        mtype = #{mtype,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="parentName != null">
+        parent_name = #{parentName,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.AccountMenu">
+    update account_menu
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      event_type = #{eventType,jdbcType=VARCHAR},
+      gid = #{gid,jdbcType=BIGINT},
+      input_code = #{inputCode,jdbcType=VARCHAR},
+      msg_id = #{msgId,jdbcType=VARCHAR},
+      msg_type = #{msgType,jdbcType=VARCHAR},
+      mtype = #{mtype,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      parent_name = #{parentName,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -18,15 +18,11 @@
  */
 package springboot.wxcms.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Date;
 
 
 @Data
@@ -37,7 +33,7 @@ import java.util.Date;
 public class UserTag extends BaseEntity {
 
     private String name;// 标签名称
-    
+
     private Integer count = 0;// 该标签的粉丝数量
 
 }

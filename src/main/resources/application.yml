@@ -7,7 +7,7 @@ spring:
 
   datasource:
     name: springboot
-    url: jdbc:mysql://127.0.0.1:3306/springboot?useSSL=true
+    url: jdbc:mysql://127.0.0.1:3306/wxmanager?useSSL=true
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -27,7 +27,7 @@ mybatis:
 # Mapper文件存放的位置
   mapper-locations: classpath:mapping/*.xml
 ## 实体类所在的包，这个时候会自动取对应包中不包括包名的简单类名作为包括包名的别名
-#  type-aliases-package: springboot.entity
+  type-aliases-package: springboot.wxcms.entity
 
 
 

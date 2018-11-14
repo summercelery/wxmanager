@@ -28,18 +28,12 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- *
- * @author hermit
- * @version 2.0
- * @date 2018-04-17 10:54:58
- */
+
 @Data
 @Entity
 @Table(name = "media_files")
 public class MediaFiles extends BaseEntity implements Serializable {
 
-	private Long id;
    	private String mediaType;//素材类型
    	private String title;//视频标题
    	private String introduction;//视频描述
@@ -47,9 +41,6 @@ public class MediaFiles extends BaseEntity implements Serializable {
    	private String mediaId;//素材media_id
    	private String uploadUrl;//项目中上传路径
    	private String rmk;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
-   	private Date createTime;
    	private Date updateTime;
    	private Long baseId;//消息主表id
 

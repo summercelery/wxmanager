@@ -2,7 +2,6 @@ package springboot.wxcms.mapper;
 
 import org.apache.ibatis.annotations.*;
 import springboot.wxcms.entity.SysUser;
-import springboot.wxcms.entity.User;
 
 public interface SysUserMapper{
 

@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "sys_user")
 @Data
 public class SysUser extends BaseEntity {
 

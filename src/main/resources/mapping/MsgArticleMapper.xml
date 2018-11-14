@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.wxcms.mapper.MsgArticleMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.MsgArticle">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ar_id" jdbcType="INTEGER" property="arId" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="content_source_url" jdbcType="VARCHAR" property="contentSourceUrl" />
+    <result column="digest" jdbcType="VARCHAR" property="digest" />
+    <result column="media_id" jdbcType="VARCHAR" property="mediaId" />
+    <result column="news_id" jdbcType="INTEGER" property="newsId" />
+    <result column="news_index" jdbcType="INTEGER" property="newsIndex" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="show_cover_pic" jdbcType="INTEGER" property="showCoverPic" />
+    <result column="thumb_media_id" jdbcType="VARCHAR" property="thumbMediaId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_time, ar_id, author, content, content_source_url, digest, media_id, news_id, 
+    news_index, pic_url, show_cover_pic, thumb_media_id, title, url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from msg_article
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from msg_article
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="springboot.wxcms.entity.MsgArticle">
+    insert into msg_article (id, create_time, ar_id, 
+      author, content, content_source_url, 
+      digest, media_id, news_id, 
+      news_index, pic_url, show_cover_pic, 
+      thumb_media_id, title, url
+      )
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{arId,jdbcType=INTEGER}, 
+      #{author,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{contentSourceUrl,jdbcType=VARCHAR}, 
+      #{digest,jdbcType=VARCHAR}, #{mediaId,jdbcType=VARCHAR}, #{newsId,jdbcType=INTEGER}, 
+      #{newsIndex,jdbcType=INTEGER}, #{picUrl,jdbcType=VARCHAR}, #{showCoverPic,jdbcType=INTEGER}, 
+      #{thumbMediaId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.MsgArticle">
+    insert into msg_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="arId != null">
+        ar_id,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="contentSourceUrl != null">
+        content_source_url,
+      </if>
+      <if test="digest != null">
+        digest,
+      </if>
+      <if test="mediaId != null">
+        media_id,
+      </if>
+      <if test="newsId != null">
+        news_id,
+      </if>
+      <if test="newsIndex != null">
+        news_index,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="showCoverPic != null">
+        show_cover_pic,
+      </if>
+      <if test="thumbMediaId != null">
+        thumb_media_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arId != null">
+        #{arId,jdbcType=INTEGER},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="contentSourceUrl != null">
+        #{contentSourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="digest != null">
+        #{digest,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaId != null">
+        #{mediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="newsId != null">
+        #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="newsIndex != null">
+        #{newsIndex,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="showCoverPic != null">
+        #{showCoverPic,jdbcType=INTEGER},
+      </if>
+      <if test="thumbMediaId != null">
+        #{thumbMediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.MsgArticle">
+    update msg_article
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="arId != null">
+        ar_id = #{arId,jdbcType=INTEGER},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="contentSourceUrl != null">
+        content_source_url = #{contentSourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="digest != null">
+        digest = #{digest,jdbcType=VARCHAR},
+      </if>
+      <if test="mediaId != null">
+        media_id = #{mediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="newsId != null">
+        news_id = #{newsId,jdbcType=INTEGER},
+      </if>
+      <if test="newsIndex != null">
+        news_index = #{newsIndex,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="showCoverPic != null">
+        show_cover_pic = #{showCoverPic,jdbcType=INTEGER},
+      </if>
+      <if test="thumbMediaId != null">
+        thumb_media_id = #{thumbMediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.MsgArticle">
+    update msg_article
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      ar_id = #{arId,jdbcType=INTEGER},
+      author = #{author,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      content_source_url = #{contentSourceUrl,jdbcType=VARCHAR},
+      digest = #{digest,jdbcType=VARCHAR},
+      media_id = #{mediaId,jdbcType=VARCHAR},
+      news_id = #{newsId,jdbcType=INTEGER},
+      news_index = #{newsIndex,jdbcType=INTEGER},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      show_cover_pic = #{showCoverPic,jdbcType=INTEGER},
+      thumb_media_id = #{thumbMediaId,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

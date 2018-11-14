@@ -3,6 +3,7 @@
 <mapper namespace="springboot.wxcms.mapper.EmailMapper">
   <resultMap id="BaseResultMap" type="springboot.wxcms.entity.Email">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
@@ -12,7 +13,8 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, content, create_date, receive_address, send_address, send_date, state, title
+    id, create_time, content, create_date, receive_address, send_address, send_date, 
+    state, title
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
@@ -25,18 +27,23 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="springboot.wxcms.entity.Email">
-    insert into email (id, content, create_date, 
-      receive_address, send_address, send_date, 
-      state, title)
-    values (#{id,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{receiveAddress,jdbcType=VARCHAR}, #{sendAddress,jdbcType=VARCHAR}, #{sendDate,jdbcType=TIMESTAMP}, 
-      #{state,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR})
+    insert into email (id, create_time, content, 
+      create_date, receive_address, send_address, 
+      send_date, state, title
+      )
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{receiveAddress,jdbcType=VARCHAR}, #{sendAddress,jdbcType=VARCHAR}, 
+      #{sendDate,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="springboot.wxcms.entity.Email">
     insert into email
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
       <if test="content != null">
         content,
@@ -64,6 +71,9 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
       </if>
@@ -90,6 +100,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.Email">
     update email
     <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
       </if>
@@ -116,7 +129,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.Email">
     update email
-    set content = #{content,jdbcType=VARCHAR},
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       receive_address = #{receiveAddress,jdbcType=VARCHAR},
       send_address = #{sendAddress,jdbcType=VARCHAR},

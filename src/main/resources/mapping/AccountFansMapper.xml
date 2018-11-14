@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.wxcms.mapper.AccountFansMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.AccountFans">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="headimgurl" jdbcType="VARCHAR" property="headimgurl" />
+    <result column="language" jdbcType="VARCHAR" property="language" />
+    <result column="nickname_str" jdbcType="VARCHAR" property="nicknameStr" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="subscribe_status" jdbcType="INTEGER" property="subscribeStatus" />
+    <result column="subscribe_time" jdbcType="TIMESTAMP" property="subscribeTime" />
+    <result column="wxid" jdbcType="VARCHAR" property="wxid" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="springboot.wxcms.entity.AccountFans">
+    <result column="nickname" jdbcType="BINARY" property="nickname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_time, city, country, gender, headimgurl, language, nickname_str, open_id, 
+    province, remark, status, subscribe_status, subscribe_time, wxid
+  </sql>
+  <sql id="Blob_Column_List">
+    nickname
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from account_fans
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from account_fans
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="springboot.wxcms.entity.AccountFans">
+    insert into account_fans (id, create_time, city, 
+      country, gender, headimgurl, 
+      language, nickname_str, open_id, 
+      province, remark, status, 
+      subscribe_status, subscribe_time, wxid, 
+      nickname)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{city,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{headimgurl,jdbcType=VARCHAR}, 
+      #{language,jdbcType=VARCHAR}, #{nicknameStr,jdbcType=VARCHAR}, #{openId,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{subscribeStatus,jdbcType=INTEGER}, #{subscribeTime,jdbcType=TIMESTAMP}, #{wxid,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=BINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.AccountFans">
+    insert into account_fans
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="country != null">
+        country,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="headimgurl != null">
+        headimgurl,
+      </if>
+      <if test="language != null">
+        language,
+      </if>
+      <if test="nicknameStr != null">
+        nickname_str,
+      </if>
+      <if test="openId != null">
+        open_id,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="subscribeStatus != null">
+        subscribe_status,
+      </if>
+      <if test="subscribeTime != null">
+        subscribe_time,
+      </if>
+      <if test="wxid != null">
+        wxid,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="headimgurl != null">
+        #{headimgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null">
+        #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="nicknameStr != null">
+        #{nicknameStr,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="subscribeStatus != null">
+        #{subscribeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="subscribeTime != null">
+        #{subscribeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wxid != null">
+        #{wxid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=BINARY},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.AccountFans">
+    update account_fans
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="headimgurl != null">
+        headimgurl = #{headimgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null">
+        language = #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="nicknameStr != null">
+        nickname_str = #{nicknameStr,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="subscribeStatus != null">
+        subscribe_status = #{subscribeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="subscribeTime != null">
+        subscribe_time = #{subscribeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wxid != null">
+        wxid = #{wxid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=BINARY},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="springboot.wxcms.entity.AccountFans">
+    update account_fans
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      city = #{city,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      headimgurl = #{headimgurl,jdbcType=VARCHAR},
+      language = #{language,jdbcType=VARCHAR},
+      nickname_str = #{nicknameStr,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      subscribe_status = #{subscribeStatus,jdbcType=INTEGER},
+      subscribe_time = #{subscribeTime,jdbcType=TIMESTAMP},
+      wxid = #{wxid,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=BINARY}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.AccountFans">
+    update account_fans
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      city = #{city,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      headimgurl = #{headimgurl,jdbcType=VARCHAR},
+      language = #{language,jdbcType=VARCHAR},
+      nickname_str = #{nicknameStr,jdbcType=VARCHAR},
+      open_id = #{openId,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      subscribe_status = #{subscribeStatus,jdbcType=INTEGER},
+      subscribe_time = #{subscribeTime,jdbcType=TIMESTAMP},
+      wxid = #{wxid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

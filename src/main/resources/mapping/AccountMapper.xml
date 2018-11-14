@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.wxcms.mapper.AccountMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.Account">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="appid" jdbcType="VARCHAR" property="appid" />
+    <result column="appsecret" jdbcType="VARCHAR" property="appsecret" />
+    <result column="msgcount" jdbcType="INTEGER" property="msgcount" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_time, account, appid, appsecret, msgcount, name, token, url
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from account
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from account
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="springboot.wxcms.entity.Account">
+    insert into account (id, create_time, account, 
+      appid, appsecret, msgcount, 
+      name, token, url)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{account,jdbcType=VARCHAR}, 
+      #{appid,jdbcType=VARCHAR}, #{appsecret,jdbcType=VARCHAR}, #{msgcount,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.Account">
+    insert into account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="appid != null">
+        appid,
+      </if>
+      <if test="appsecret != null">
+        appsecret,
+      </if>
+      <if test="msgcount != null">
+        msgcount,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null">
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="appsecret != null">
+        #{appsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="msgcount != null">
+        #{msgcount,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.Account">
+    update account
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null">
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="appsecret != null">
+        appsecret = #{appsecret,jdbcType=VARCHAR},
+      </if>
+      <if test="msgcount != null">
+        msgcount = #{msgcount,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.Account">
+    update account
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      account = #{account,jdbcType=VARCHAR},
+      appid = #{appid,jdbcType=VARCHAR},
+      appsecret = #{appsecret,jdbcType=VARCHAR},
+      msgcount = #{msgcount,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

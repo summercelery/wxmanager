@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.wxcms.mapper.SysConfigMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.SysConfig">
+    <id column="jkey" jdbcType="VARCHAR" property="jkey" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="jvalue" jdbcType="VARCHAR" property="jvalue" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    jkey, description, jvalue
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_config
+    where jkey = #{jkey,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_config
+    where jkey = #{jkey,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="springboot.wxcms.entity.SysConfig">
+    insert into sys_config (jkey, description, jvalue
+      )
+    values (#{jkey,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{jvalue,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.SysConfig">
+    insert into sys_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jkey != null">
+        jkey,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="jvalue != null">
+        jvalue,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jkey != null">
+        #{jkey,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="jvalue != null">
+        #{jvalue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.SysConfig">
+    update sys_config
+    <set>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="jvalue != null">
+        jvalue = #{jvalue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where jkey = #{jkey,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.SysConfig">
+    update sys_config
+    set description = #{description,jdbcType=VARCHAR},
+      jvalue = #{jvalue,jdbcType=VARCHAR}
+    where jkey = #{jkey,jdbcType=VARCHAR}
+  </update>
+</mapper>

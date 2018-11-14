@@ -26,12 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- *
- * @author hermit
- * @version 2.0
- * @date 2018-04-17 10:54:58
- */
+
 @Data
 public class MsgBase extends BaseEntity {
 	private String msgtype;//消息类型;

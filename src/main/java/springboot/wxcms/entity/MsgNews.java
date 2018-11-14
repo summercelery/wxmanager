@@ -22,6 +22,7 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.List;
 
 
@@ -50,6 +51,6 @@ public class MsgNews extends MsgBase{
 
 	private String start;
 	private String end;
-	//一对多
+	@Transient
 	private List<MsgArticle> articles;
 }

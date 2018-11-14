@@ -3,9 +3,9 @@
 <mapper namespace="springboot.wxcms.mapper.PhoneCodeMapper">
   <resultMap id="BaseResultMap" type="springboot.wxcms.entity.PhoneCode">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="clock_time" jdbcType="TIMESTAMP" property="clockTime" />
     <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime" />
     <result column="message" jdbcType="VARCHAR" property="message" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
@@ -14,7 +14,7 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, clock_time, code, create_time, expire_time, message, phone, send_time, state, 
+    id, create_time, clock_time, code, expire_time, message, phone, send_time, state, 
     type
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -28,12 +28,12 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="springboot.wxcms.entity.PhoneCode">
-    insert into phone_code (id, clock_time, code, 
-      create_time, expire_time, message, 
+    insert into phone_code (id, create_time, clock_time, 
+      code, expire_time, message, 
       phone, send_time, state, 
       type)
-    values (#{id,jdbcType=VARCHAR}, #{clockTime,jdbcType=TIMESTAMP}, #{code,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{expireTime,jdbcType=TIMESTAMP}, #{message,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{clockTime,jdbcType=TIMESTAMP}, 
+      #{code,jdbcType=VARCHAR}, #{expireTime,jdbcType=TIMESTAMP}, #{message,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}, 
       #{type,jdbcType=VARCHAR})
   </insert>
@@ -43,14 +43,14 @@
       <if test="id != null">
         id,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
       <if test="clockTime != null">
         clock_time,
       </if>
       <if test="code != null">
         code,
-      </if>
-      <if test="createTime != null">
-        create_time,
       </if>
       <if test="expireTime != null">
         expire_time,
@@ -75,14 +75,14 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="clockTime != null">
         #{clockTime,jdbcType=TIMESTAMP},
       </if>
       <if test="code != null">
         #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="expireTime != null">
         #{expireTime,jdbcType=TIMESTAMP},
@@ -107,14 +107,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.PhoneCode">
     update phone_code
     <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="clockTime != null">
         clock_time = #{clockTime,jdbcType=TIMESTAMP},
       </if>
       <if test="code != null">
         code = #{code,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="expireTime != null">
         expire_time = #{expireTime,jdbcType=TIMESTAMP},
@@ -139,9 +139,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.PhoneCode">
     update phone_code
-    set clock_time = #{clockTime,jdbcType=TIMESTAMP},
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      clock_time = #{clockTime,jdbcType=TIMESTAMP},
       code = #{code,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
       expire_time = #{expireTime,jdbcType=TIMESTAMP},
       message = #{message,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},

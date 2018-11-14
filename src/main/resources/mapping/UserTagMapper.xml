@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="springboot.wxcms.mapper.RoleMapper">
-  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.Role">
+<mapper namespace="springboot.wxcms.mapper.UserTagMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.UserTag">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, create_time, role_name
+    id, create_time, count, name
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from role
+    from user_tag
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from role
+    delete from user_tag
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="springboot.wxcms.entity.Role">
-    insert into role (id, create_time, role_name
-      )
-    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{roleName,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="springboot.wxcms.entity.UserTag">
+    insert into user_tag (id, create_time, count, 
+      name)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{count,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="springboot.wxcms.Role">
-    insert into role
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.UserTag">
+    insert into user_tag
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -34,8 +35,11 @@
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="roleName != null">
-        role_name,
+      <if test="count != null">
+        count,
+      </if>
+      <if test="name != null">
+        name,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -45,27 +49,34 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="roleName != null">
-        #{roleName,jdbcType=VARCHAR},
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.Role">
-    update role
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.UserTag">
+    update user_tag
     <set>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="roleName != null">
-        role_name = #{roleName,jdbcType=VARCHAR},
+      <if test="count != null">
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.Role">
-    update role
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.UserTag">
+    update user_tag
     set create_time = #{createTime,jdbcType=TIMESTAMP},
-      role_name = #{roleName,jdbcType=VARCHAR}
+      count = #{count,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>
