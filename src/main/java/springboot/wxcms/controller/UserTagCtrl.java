@@ -1,57 +1,34 @@
-/*
- * FileName：UserTagCtrl.java 
- * <p>
- * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
- * <p>
- * Licensed under the GNU General Public License, Version 3 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/gpl-3.0.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- */
+
 package springboot.wxcms.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wxmp.core.common.BaseCtrl;
-import com.wxmp.core.common.Constants;
-import com.wxmp.core.exception.WxErrorException;
-import com.wxmp.core.util.AjaxResult;
-import com.wxmp.wxapi.process.MpAccount;
-import com.wxmp.wxapi.process.WxApiClient;
-import com.wxmp.wxapi.process.WxMemoryCacheClient;
-import com.wxmp.wxcms.domain.AccountFans;
-import com.wxmp.wxcms.domain.UserTag;
-import com.wxmp.wxcms.service.AccountFansService;
-import com.wxmp.wxcms.service.UserTagService;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import springboot.core.constant.Constants;
+import springboot.wxapi.process.MpAccount;
+import springboot.wxapi.process.WxApiClient;
+import springboot.wxcms.entity.AccountFans;
+import springboot.wxcms.entity.Result;
+import springboot.wxcms.entity.UserTag;
+import springboot.wxcms.service.AccountFansService;
+import springboot.wxcms.service.UserTagService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author fuziKong
- * @version 2.0
- * @date 2018-05-30 10:54:58
- */
-@Controller
+
+@RestController
 @RequestMapping("/userTag")
-public class UserTagCtrl extends BaseCtrl {
+public class UserTagCtrl {
 
 	@Autowired
-	private UserTagService entityService;
+	private UserTagService userTagService;
 	@Autowired
 	private AccountFansService accountFansService;
 	
@@ -62,8 +39,7 @@ public class UserTagCtrl extends BaseCtrl {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getUserListByTag")
-	@ResponseBody
-	public AjaxResult getUserListByTag(Integer id) throws WxErrorException {
+	public Result getUserListByTag(Integer id) throws WxErrorException {
 		MpAccount mpAccount = WxMemoryCacheClient.getMpAccount();//获取缓存中的唯一账号
 		JSONObject  tagId = new JSONObject();
 		tagId.put("tagid", id);
@@ -81,11 +57,10 @@ public class UserTagCtrl extends BaseCtrl {
 				fansList.add(fans);
 			}
 			 fansList = accountFansService.getFansByOpenIdListByPage(fansList);
-			return AjaxResult.success(fansList);
+			return Result.ok(fansList);
 		}
-		AjaxResult result = new AjaxResult();
-		result.setMsg("没有数据");
-		return result;
+
+		return Result.fail("没有数据");
 	}
 
 	/**
@@ -94,10 +69,9 @@ public class UserTagCtrl extends BaseCtrl {
 	 * @return
 	 */
 	@RequestMapping(value = "/getById")
-	@ResponseBody
-	public AjaxResult getById(Integer id){
-		UserTag  userTag = entityService.getById(id);
-		return AjaxResult.success(userTag);
+	public Result getById(Integer id){
+		UserTag userTag = userTagService.getById(id);
+		return Result.ok(userTag);
 	}
 
 	/**
@@ -106,13 +80,12 @@ public class UserTagCtrl extends BaseCtrl {
 	 * @return
 	 */
 	@RequestMapping(value = "/listForPage")
-	@ResponseBody
-	public AjaxResult listForPage(UserTag searchEntity) {
-		List<UserTag> list = entityService.listForPage(searchEntity);
+	public Result listForPage(UserTag searchEntity) {
+		List<UserTag> list = userTagService.listForPage(searchEntity);
 		if (CollectionUtils.isEmpty(list)) {
-			return AjaxResult.success();
+			return Result.ok();
 		}
-		return getResult(searchEntity,list);
+		return Result.ok(list);
 	}
 
 	/**
@@ -122,12 +95,11 @@ public class UserTagCtrl extends BaseCtrl {
 	 * @throws WxErrorException 
 	 */
 	@RequestMapping(value = "/update")
-	@ResponseBody
-	public AjaxResult update(UserTag entity) throws WxErrorException{
+	public Result update(UserTag entity) throws WxErrorException{
 		if (entity.getId() != null) {
-			entityService.update(entity);
+			userTagService.update(entity);
 			//更新成功
-			return AjaxResult.updateSuccess();
+			return Result.updateSuccess();
 		} else {
 			//添加分两步
 			//1. 调用微信API添加 
@@ -142,10 +114,10 @@ public class UserTagCtrl extends BaseCtrl {
 			if(userTag != null) {
 				JSONObject returnUserTag = (JSONObject) userTag.get("tag");
 				entity = JSONObject.parseObject(returnUserTag.toJSONString(), UserTag.class);
-				entityService.add(entity);
-				return AjaxResult.saveSuccess();
+				userTagService.add(entity);
+				return Result.saveSuccess();
 			}
-			return AjaxResult.failure(Constants.MSG_ERROR);
+			return Result.failure(Constants.MSG_ERROR);
 		}
 	}
 
@@ -156,15 +128,14 @@ public class UserTagCtrl extends BaseCtrl {
 	 * @throws WxErrorException 
 	 */
 	@RequestMapping(value = "/deleteById")
-	@ResponseBody
-	public AjaxResult deleteById(UserTag entity) {
+	public Result deleteById(UserTag entity) {
 		//1.删除微信服务器的用户标签
 		if(deleteUserTag(entity.getId())){
 			//2.删除本地数据库的用户标签
-			entityService.delete(entity);
-			return AjaxResult.deleteSuccess();
+			userTagService.delete(entity);
+			return Result.deleteSuccess();
 		}
-		return AjaxResult.failure("用户标签删除失败！");
+		return Result.failure("用户标签删除失败！");
 	}
 	
 	/**
@@ -174,8 +145,7 @@ public class UserTagCtrl extends BaseCtrl {
 	 * @throws WxErrorException 
 	 */
 	@RequestMapping(value = "/deleteBatchIds")
-	@ResponseBody
-	public AjaxResult deleteBatchIds(String [] ids)  {
+	public Result deleteBatchIds(String [] ids)  {
 		if(null != ids && ids.length>0) {
 			int nums = 0;
 			for (String id : ids) {
@@ -184,11 +154,11 @@ public class UserTagCtrl extends BaseCtrl {
 				}
 			}
 			if(nums == ids.length) {
-				entityService.deleteBatchIds(ids);				
+				userTagService.deleteBatchIds(ids);
 			}
-			return AjaxResult.deleteSuccess();
+			return Result.deleteSuccess();
 		}else {
-			return AjaxResult.failure("用户标签批量删除失败");
+			return Result.failure("用户标签批量删除失败");
 		}
 	}
 	/**

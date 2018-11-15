@@ -24,14 +24,10 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
-/**
- *
- * @author hermit
- * @version 2.0
- * @date 2018-04-17 10:54:58
- */
+
 @Data
 @Entity
 @Table(name = "img_resource")
@@ -74,7 +70,7 @@ public class ImgResource extends BaseEntity implements Serializable {
 	/**
 	 * 修改时间
 	 */
-	private Date  updateTime;
+	private LocalDateTime updateTime;
 
 	/**
 	 * 图片状态字段：0.未引用 ，1.已被引用

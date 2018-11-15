@@ -1,44 +1,25 @@
-/*
- * FileName：MsgNewsCtrl.java 
- * <p>
- * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
- * <p>
- * Licensed under the GNU General Public License, Version 3 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/gpl-3.0.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- */
+
 package springboot.wxcms.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wxmp.core.common.BaseCtrl;
-import com.wxmp.core.exception.WxErrorException;
-import com.wxmp.core.spring.SpringFreemarkerContextPathUtil;
-import com.wxmp.core.util.AjaxResult;
-import com.wxmp.wxapi.process.MediaType;
-import com.wxmp.wxapi.process.MpAccount;
-import com.wxmp.wxapi.process.WxApiClient;
-import com.wxmp.wxapi.process.WxMemoryCacheClient;
-import com.wxmp.wxcms.domain.MediaFiles;
-import com.wxmp.wxcms.domain.MsgArticle;
-import com.wxmp.wxcms.domain.MsgNews;
-import com.wxmp.wxcms.service.MsgArticleService;
-import com.wxmp.wxcms.service.MsgNewsService;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import springboot.wxapi.process.MediaType;
+import springboot.wxapi.process.MpAccount;
+import springboot.wxapi.process.WxApiClient;
+import springboot.wxapi.process.WxMemoryCacheClient;
+import springboot.wxcms.entity.MediaFiles;
+import springboot.wxcms.entity.MsgArticle;
+import springboot.wxcms.entity.MsgNews;
+import springboot.wxcms.entity.Result;
+import springboot.wxcms.service.MsgArticleService;
+import springboot.wxcms.service.MsgNewsService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -48,15 +29,10 @@ import java.util.regex.Pattern;
 
 import static com.wxmp.core.util.DateUtilOld.COMMON_FULL;
 
-/**
- *
- * @author hermit
- * @version 2.0
- * @date 2018-04-17 10:54:58
- */
-@Controller
+
+@RestController
 @RequestMapping("/msgnews")
-public class MsgNewsCtrl extends BaseCtrl {
+public class MsgNewsController {
 
     @Autowired
     private MsgNewsService msgNewsService;
@@ -65,16 +41,14 @@ public class MsgNewsCtrl extends BaseCtrl {
     private MsgArticleService articleService;
 
     @RequestMapping(value = "/detail")
-    @ResponseBody
-    public AjaxResult getById(String id) {
-        return AjaxResult.success(msgNewsService.getById(id));
+    public Result getById(String id) {
+        return Result.ok(msgNewsService.getById(id));
     }
 
     @RequestMapping(value = "/list")
-    @ResponseBody
-    public AjaxResult list(MsgNews searchEntity) {
+    public Result list(MsgNews searchEntity) {
         List<MsgNews> pageList = msgNewsService.getWebNewsListByPage(searchEntity);
-        return getResult(searchEntity, pageList);
+        return Result.ok(pageList);
     }
 
     /**
@@ -109,7 +83,7 @@ public class MsgNewsCtrl extends BaseCtrl {
             if (newsResultObj != null && newsResultObj.containsKey("media_id")) {
                 String newsMediaId = newsResultObj.getString("media_id");
                 MsgNews entity = new MsgNews();
-                entity.setId(Long.valueOf(newsId));
+                entity.setId(newsId);
                 entity.setMediaId(newsMediaId);
                 msgNewsService.updateMediaId(entity);
                 code = "1";
@@ -132,8 +106,7 @@ public class MsgNewsCtrl extends BaseCtrl {
      * @return
      */
     @RequestMapping(value = "/addSingleNews", method = RequestMethod.POST)
-    @ResponseBody
-    public AjaxResult addSingleNews(MsgNews msgNews, HttpServletRequest request)
+    public Result addSingleNews(MsgNews msgNews, HttpServletRequest request)
         throws Exception {
         
         String filePath = request.getSession().getServletContext().getRealPath("/");
@@ -227,12 +200,12 @@ public class MsgNewsCtrl extends BaseCtrl {
             int resultCount = this.msgNewsService.addSingleNews(newsPo, entity);
             
             if (resultCount > 0) {
-                return AjaxResult.success();
+                return Result.ok();
             } else {
-                return AjaxResult.failure();
+                return Result.failure();
             }
         }
-        return AjaxResult.failure();
+        return Result.failure();
         
     }
 
@@ -245,8 +218,7 @@ public class MsgNewsCtrl extends BaseCtrl {
      * @throws Exception
      */
     @RequestMapping(value = "/addMoreNews", method = RequestMethod.POST)
-    @ResponseBody
-    public AjaxResult addMoreNews(String rows, HttpServletRequest request) throws Exception {
+    public Result addMoreNews(String rows, HttpServletRequest request) throws Exception {
 
         String filePath = request.getSession().getServletContext().getRealPath("/");
 
@@ -369,10 +341,10 @@ public class MsgNewsCtrl extends BaseCtrl {
 
             int bl = this.msgNewsService.addMoreNews(msgNew);
             if (bl == 1) {
-                return AjaxResult.success();
+                return Result.ok();
             }
         }
-        return AjaxResult.failure();
+        return Result.fail("");
     }
 
     /**
@@ -382,8 +354,7 @@ public class MsgNewsCtrl extends BaseCtrl {
      * @return
      */
     @RequestMapping(value = "/deleteMaterial", method = RequestMethod.POST)
-    @ResponseBody
-    public AjaxResult deleteMaterial(String id) throws WxErrorException {
+    public Result deleteMaterial(String id) throws WxErrorException {
         MsgNews news = msgNewsService.getById(id);
         // 添加多图文永久素材
         JSONObject jsonObject = WxApiClient.deleteMaterial(news.getMediaId(), WxMemoryCacheClient.getMpAccount());
@@ -392,12 +363,12 @@ public class MsgNewsCtrl extends BaseCtrl {
 
             try {
                 this.msgNewsService.delete(news);
-                return AjaxResult.deleteSuccess();
+                return Result.deleteSuccess();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return AjaxResult.failure();
+        return Result.failure();
     }
 
     /**
@@ -407,11 +378,10 @@ public class MsgNewsCtrl extends BaseCtrl {
      * @return
      */
     @RequestMapping(value = "/toUpdateSingleNews", method = RequestMethod.POST)
-    @ResponseBody
-    public AjaxResult toUpdateSingleNews(String id) {
+    public Result toUpdateSingleNews(String id) {
         MsgNews newsObj = msgNewsService.getById(id);
 
-        return AjaxResult.success(newsObj);
+        return Result.ok(newsObj);
     }
 
     /**
@@ -422,8 +392,7 @@ public class MsgNewsCtrl extends BaseCtrl {
      * @return
      */
     @RequestMapping(value = "/updateSingleNews", method = RequestMethod.POST)
-    @ResponseBody
-    public AjaxResult updateSingleNews(MsgNews msgNews, HttpServletRequest request) throws Exception {
+    public Result updateSingleNews(MsgNews msgNews, HttpServletRequest request) throws Exception {
         String filePath = request.getSession().getServletContext().getRealPath("/");
 
         String description = msgNews.getDescription();
@@ -495,13 +464,13 @@ public class MsgNewsCtrl extends BaseCtrl {
             try {
                 // 更新成功
                 this.msgNewsService.updateSingleNews(msgNews);
-                return AjaxResult.updateSuccess();
+                return Result.updateSuccess();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
-        return AjaxResult.failure();
+        return Result.failure();
     }
 
     /**
@@ -511,10 +480,9 @@ public class MsgNewsCtrl extends BaseCtrl {
      * @return
      */
     @RequestMapping(value = "/toUpdateMoreNews")
-    @ResponseBody
-    public AjaxResult toUpdateMoreNews(String id) {
+    public Result toUpdateMoreNews(String id) {
         MsgNews newsObj = msgNewsService.getById(id);
-        return AjaxResult.success(newsObj.getArticles());
+        return Result.ok(newsObj.getArticles());
     }
 
     /**
@@ -525,8 +493,7 @@ public class MsgNewsCtrl extends BaseCtrl {
      * @return
      */
     @RequestMapping(value = "/updateSubMoreNews", method = RequestMethod.POST)
-    @ResponseBody
-    public AjaxResult updateMoreNews(String rows, HttpServletRequest request) throws Exception {
+    public Result updateMoreNews(String rows, HttpServletRequest request) throws Exception {
         String filePath = request.getSession().getServletContext().getRealPath("/");
         MsgArticle article = (MsgArticle) JSONObject.parseObject(rows, MsgArticle.class);
         String description = article.getContent();
@@ -627,14 +594,14 @@ public class MsgNewsCtrl extends BaseCtrl {
             // 修改图文news表数据
             MsgNews msgNews = this.msgNewsService.getById(String.valueOf(article.getNewsId()));
             List<MsgArticle> newArticles = msgNews.getArticles();
-            if (newArticles.get(0).getArId() == article.getArId()) {
+            if (newArticles.get(0).getArId().equals(article.getArId())) {
                 // 这里只修改title 为了模糊查询的时候可以查询到数据
                 msgNews.setTitle(article.getTitle());
                 this.msgNewsService.updateMediaId(msgNews);
             }
-            return AjaxResult.updateSuccess();
+            return Result.updateSuccess();
         } else {
-            return AjaxResult.failure();
+            return Result.failure();
         }
 
     }

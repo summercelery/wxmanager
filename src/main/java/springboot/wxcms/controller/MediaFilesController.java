@@ -1,55 +1,36 @@
-/*
- * FileName：MediaFilesCtrl.java 
- * <p>
- * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
- * <p>
- * Licensed under the GNU General Public License, Version 3 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/gpl-3.0.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- */
+
 package springboot.wxcms.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.wxmp.core.common.BaseCtrl;
-import com.wxmp.core.exception.WxErrorException;
-import com.wxmp.core.util.AjaxResult;
-import com.wxmp.core.util.PropertiesUtil;
-import com.wxmp.wxapi.process.MpAccount;
-import com.wxmp.wxapi.process.WxApi;
-import com.wxmp.wxapi.process.WxApiClient;
-import com.wxmp.wxapi.process.WxMemoryCacheClient;
-import com.wxmp.wxcms.domain.ImgResource;
-import com.wxmp.wxcms.domain.MediaFiles;
-import com.wxmp.wxcms.service.ImgResourceService;
-import com.wxmp.wxcms.service.MediaFileService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import springboot.core.util.PropertiesUtil;
+import springboot.wxapi.process.MpAccount;
+import springboot.wxapi.process.WxApi;
+import springboot.wxapi.process.WxApiClient;
+import springboot.wxapi.process.WxMemoryCacheClient;
+import springboot.wxcms.entity.ImgResource;
+import springboot.wxcms.entity.MediaFiles;
+import springboot.wxcms.entity.Result;
+import springboot.wxcms.service.ImgResourceService;
+import springboot.wxcms.service.MediaFileService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * 语音和视频控制器
- * @author nigualding
- * 后面会把图片和语音上传合并到一个方法中。
- *
  */
-@Controller
+@RestController
 @RequestMapping("mediaFile")
-public class MediaFilesCtrl extends BaseCtrl {
+public class MediaFilesController  {
 
 	@Autowired
 	private MediaFileService mediaFileService;
@@ -62,10 +43,9 @@ public class MediaFilesCtrl extends BaseCtrl {
 	 * @return
 	 */
     @RequestMapping(value = "/list")
-    @ResponseBody
-    public AjaxResult list(MediaFiles searchEntity) {
+    public Result list(MediaFiles searchEntity) {
         List<MediaFiles> pageList = mediaFileService.getMediaListByPage(searchEntity);
-        return getResult(searchEntity, pageList);
+        return Result.ok(pageList);
     }
     /**
      * 添加视频素材
@@ -74,8 +54,7 @@ public class MediaFilesCtrl extends BaseCtrl {
      * @throws WxErrorException
      */
     @RequestMapping(value = "/addVideo")
-    @ResponseBody
-    public AjaxResult addVideo(MediaFiles mediaFile) throws WxErrorException{
+    public Result addVideo(MediaFiles mediaFile) throws WxErrorException{
     	MpAccount mpAccount = WxMemoryCacheClient.getMpAccount();
     	String accessToken = WxApiClient.getAccessToken(mpAccount);
     	Map<String,String> params=new HashMap<>();
@@ -86,10 +65,10 @@ public class MediaFilesCtrl extends BaseCtrl {
     	JSONObject result = WxApi.addMateria(accessToken, "video", mediaFile.getUrl(), params);
     	mediaFile.setMediaId(result.getString("media_id"));
     	mediaFile.setMediaType("video");
-    	mediaFile.setCreateTime(new Date(System.currentTimeMillis()));
-    	mediaFile.setUpdateTime(new Date(System.currentTimeMillis()));
+    	mediaFile.setCreateTime(LocalDateTime.now());
+    	mediaFile.setUpdateTime(LocalDateTime.now());
     	mediaFileService.add(mediaFile);
-    	return AjaxResult.saveSuccess();
+    	return Result.ok();
     }
     /**
      *  删除素材（微信端和本地数据库）
@@ -97,12 +76,11 @@ public class MediaFilesCtrl extends BaseCtrl {
      * @return
      * @throws WxErrorException
      */
-    @ResponseBody
 	@RequestMapping("delMediaFile")
-    public AjaxResult delMediaFile(String mediaId) throws WxErrorException{
+    public Result delMediaFile(String mediaId) throws WxErrorException{
 		WxApiClient.deleteMaterial(mediaId,WxMemoryCacheClient.getMpAccount());
     	mediaFileService.deleteByMediaId(mediaId);
-    	return AjaxResult.deleteSuccess();
+    	return Result.deleteSuccess();
     }
     
     /**
@@ -111,9 +89,8 @@ public class MediaFilesCtrl extends BaseCtrl {
      * @return
      * @throws Exception
      */
-    @ResponseBody
 	@RequestMapping("uploadFile")
-	public AjaxResult uploadFile(MultipartFile file) throws Exception {
+	public Result uploadFile(MultipartFile file,HttpServletRequest request) throws Exception {
 		//原文件名称
 		String trueName = file.getOriginalFilename();
 		//文件后缀名
@@ -145,7 +122,7 @@ public class MediaFilesCtrl extends BaseCtrl {
 		mapData.put("url", filePath);//文件绝对路径url
 		mapData.put("title", fileName);//图片名称，这个会显示在输入框里
 		
-		return AjaxResult.success(mapData);
+		return Result.ok(mapData);
     }
     /**
      *  添加语音\图片\缩略图素材
@@ -153,9 +130,8 @@ public class MediaFilesCtrl extends BaseCtrl {
      * @return
      * @throws Exception
      */
-    @ResponseBody
 	@RequestMapping("addMateria")
-	public AjaxResult addMateria(MultipartFile file,String type) throws Exception {
+	public Result addMateria(MultipartFile file, String type, HttpServletRequest request) throws Exception {
     	JSONObject obj = new JSONObject();
     	if (null == file) {
 			obj.put("message", "没有文件上传");
@@ -207,7 +183,7 @@ public class MediaFilesCtrl extends BaseCtrl {
     		String imgRes = this.imgResourceService.addImg(img);
     		obj.put("url", imgRes);
 			obj.put("imgMediaId", mediaId);
-			return AjaxResult.success(obj);
+			return Result.ok(obj);
     	}else {//音频 voice
 	    	MediaFiles mediaFile =new MediaFiles();
 	    	mediaFile.setUploadUrl(resURL + fileName);
@@ -215,10 +191,10 @@ public class MediaFilesCtrl extends BaseCtrl {
 	    	mediaFile.setTitle(fileName);//用title保存文件名
 	    	mediaFile.setMediaId(mediaId);
 	    	mediaFile.setMediaType(type);
-	    	mediaFile.setCreateTime(new Date(System.currentTimeMillis()));
-	    	mediaFile.setUpdateTime(new Date(System.currentTimeMillis()));
+	    	mediaFile.setCreateTime(LocalDateTime.now());
+	    	mediaFile.setUpdateTime(LocalDateTime.now());
 	    	mediaFileService.add(mediaFile);
-			return AjaxResult.saveSuccess();
+			return Result.saveSuccess();
     	}
     }
 }

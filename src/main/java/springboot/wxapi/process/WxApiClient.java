@@ -20,40 +20,31 @@ package springboot.wxapi.process;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wxmp.core.exception.WxError;
-import com.wxmp.core.exception.WxErrorException;
-import com.wxmp.core.util.DateUtil;
-import com.wxmp.core.util.wx.WxUtil;
-import com.wxmp.wxapi.vo.Material;
-import com.wxmp.wxapi.vo.MaterialArticle;
-import com.wxmp.wxapi.vo.MaterialItem;
-import com.wxmp.wxapi.vo.TemplateMessage;
-import com.wxmp.wxcms.domain.AccountFans;
-import com.wxmp.wxcms.domain.MsgNews;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import springboot.core.util.wx.WxUtil;
+import springboot.wxcms.entity.AccountFans;
+import springboot.wxcms.entity.MsgNews;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * 微信 客户端，统一处理微信相关接口
  */
 @Component
+@Slf4j
 public class WxApiClient {
-    
-    private static Logger logger = Logger.getLogger(WxApiClient.class);
-    
+
     // 获取accessToken
     public static String getAccessToken(MpAccount mpAccount)
         throws WxErrorException {
         // 获取唯一的accessToken，如果是多账号，请自行处理
         AccessToken token = WxMemoryCacheClient.getAccessToken();
         if (token != null && !token.isExpires() && WxApi.getCallbackIp(token.getAccessToken())) {// 不为空，并且没有过期
-            logger.info("服务器缓存 accessToken == " + token.toString());
+            log.info("服务器缓存 accessToken == " + token.toString());
             return token.getAccessToken();
         } else {
             token = WxApi.getAccessToken(mpAccount.getAppid(), mpAccount.getAppsecret());
@@ -187,12 +178,12 @@ public class WxApiClient {
     public static AccountFans syncAccountFans(String openId, MpAccount mpAccount)
         throws WxErrorException {
         String accessToken = getAccessToken(mpAccount);
-        logger.info("获取用户信息接口accessToken：" + accessToken);
+        log.info("获取用户信息接口accessToken：" + accessToken);
         String url = WxApi.getFansInfoUrl(accessToken, openId);
-        logger.info("获取用户信息接口url：" + url);
+        log.info("获取用户信息接口url：" + url);
         JSONObject jsonObj = WxApi.httpsRequest(url, "GET", null);
         if (null != jsonObj) {
-            logger.info("获取用户信息接口返回结果：" + jsonObj.toString());
+            log.info("获取用户信息接口返回结果：" + jsonObj.toString());
             if (jsonObj.containsKey("errcode")) {
                 throw new WxErrorException(WxError.fromJson(jsonObj));
             } else {
@@ -232,7 +223,7 @@ public class WxApiClient {
                     fans.setRemark(jsonObj.getString("remark"));
                 }
                 fans.setStatus(1);
-                fans.setCreateTime(new Date());
+                fans.setCreateTime(LocalDateTime.now());
                 return fans;
             }
         }

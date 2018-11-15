@@ -29,16 +29,16 @@ import java.io.Serializable;
 public class Page implements Serializable {
 
     @Transient
-    private int page = 1;// 当前页索引
+    private Integer pageNum = 1;// 当前页索引
 
     @Transient
-    private int pageSize = 20;// 每页显示的数据条数
+    private Integer pageSize = 20;// 每页显示的数据条数
 
     @Transient
-    private int total = 0;// 总条数
+    private Long total = 0L;// 总条数
 
     @Transient
-    private int totalPage = 1;// 总页数
+    private Integer pages = 1;// 总页数
     
     // private String sort;// 排序字段
     //

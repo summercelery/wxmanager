@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ public class SysUser extends BaseEntity {
     private String email;
     @Phone
     private String phone;
-    private Date lastLoginDate;
+    private LocalDateTime lastLoginDate;
     //性别 0男 1女
     private String sex;
     //姓名

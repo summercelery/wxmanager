@@ -1,9 +1,10 @@
 package springboot.wxcms.entity;
 
+import com.github.pagehelper.Page;
 import lombok.Data;
 import springboot.core.constant.Constants;
-
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 /**
  * 返回数据
@@ -23,22 +24,30 @@ public class Result<T> {
     private String msg;
 
     //响应时间
-    private Date dateTime;
+    private LocalDateTime dateTime;
 
     //分页信息
-    private Page page;
+    private springboot.wxcms.entity.Page page;
 
     public Result(Boolean success, String message) {
         this.success = success;
         this.msg = message;
-        this.dateTime = new Date();
+        this.dateTime = LocalDateTime.now();
     }
 
+
     public Result(T t) {
+        if(t instanceof Page){
+            Page newPage = (Page) t;
+            page.setPageNum(newPage.getPageNum());
+            page.setPageSize(newPage.getPageSize());
+            page.setPages(newPage.getPages());
+            page.setTotal(newPage.getTotal());
+        }
         this.success = true;
         this.date = t;
         this.msg =Constants.MSG_SUCCESS;
-        this.dateTime = new Date();
+        this.dateTime = LocalDateTime.now();
     }
 
     public static Result ok() {

@@ -13,17 +13,18 @@ public class SysUserService {
     @Resource
     private SysUserMapper sysUserMapper;
 
-    public SysUser getSysUser(SysUser sysUser) {
-        return sysUserMapper.getSysUser(sysUser);
+    public SysUser getSysUserById(String userId) {
+        return sysUserMapper.selectByPrimaryKey(userId);
     }
 
-    public SysUser getSysUserById(String userId) {
-        return sysUserMapper.getSysUserById(userId);
+    public SysUser getSysUserByLoginName(String loginName){
+        return  sysUserMapper.findSysUserByLoginName(loginName);
     }
 
     public int updateLoginPwd(SysUser sysUser) {
         return sysUserMapper.updateLoginPwd(sysUser);
     }
+
 
     public int createUser(SysUser sysUser) {
         return sysUserMapper.insertSelective(sysUser);

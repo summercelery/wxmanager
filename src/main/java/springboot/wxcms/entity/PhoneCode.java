@@ -7,6 +7,7 @@ import springboot.core.anno.Phone;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -35,14 +36,14 @@ public class  PhoneCode extends BaseEntity {
     private String code;
 
     @JsonIgnore
-    private Date clockTime;
+    private LocalDateTime clockTime;
 
     private String state;
 
     @JsonIgnore
-    private Date sendTime;
+    private LocalDateTime sendTime;
 
-    private Date expireTime;
+    private LocalDateTime expireTime;
 
 
 }

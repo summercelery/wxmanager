@@ -17,10 +17,6 @@ public class JsonUtil {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
     static {
-
-
-
-
         //序列化时只序列化不为空的
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         //Json序列化增加类别标识就能准确判断子类类型。

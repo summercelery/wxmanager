@@ -1,15 +1,18 @@
 package springboot.wxcms.controller;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import springboot.core.core.shiro.CustomerAuthenticationToken;
 import springboot.core.util.Md5Util;
+import springboot.wxapi.process.WxMemoryCacheClient;
+import springboot.wxcms.entity.Account;
 import springboot.wxcms.entity.Result;
 import springboot.wxcms.entity.SysUser;
 import springboot.wxcms.service.AccountService;
@@ -30,10 +33,13 @@ public class SysUserController {
     public Result login(SysUser user, Boolean rememberMe) {
 
         log.debug(user.getLoginName() + "正在登陆........");
-        CustomerAuthenticationToken token = new CustomerAuthenticationToken(user.getLoginName(), user.getPassword(), rememberMe);
-        token.setLoginType("loginName");
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginName(), user.getPassword(), rememberMe);
         Subject currentSubject = SecurityUtils.getSubject();
-        currentSubject.getSession().setAttribute("DEFAULT_WECHAT_ACCOUNT_SESSION", accountService.getSingleAccount());
+        //设置登陆者默认公众号
+        Account account = accountService.getSingleAccount();
+        if (account != null) {
+            WxMemoryCacheClient.setAccount(account.getAccount());
+        }
         try {
             currentSubject.login(token);
         } catch (UnknownAccountException | IncorrectCredentialsException e) {

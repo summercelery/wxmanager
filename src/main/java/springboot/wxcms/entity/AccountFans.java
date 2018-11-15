@@ -1,21 +1,4 @@
-/*
- * FileName：AccountFans.java 
- * <p>
- * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
- * <p>
- * Licensed under the GNU General Public License, Version 3 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/gpl-3.0.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- */
+
 package springboot.wxcms.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -26,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -37,7 +21,7 @@ public class AccountFans extends BaseEntity implements Serializable{
 	private Integer subscribeStatus;//订阅状态
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss",iso= DateTimeFormat.ISO.DATE_TIME)
-	private Date subscribeTime;//订阅时间
+	private LocalDateTime subscribeTime;//订阅时间
 	private byte[] nickname;//昵称,二进制保存emoji表情
 	private String nicknameStr;//昵称显示
 	private String wxid;//微信号

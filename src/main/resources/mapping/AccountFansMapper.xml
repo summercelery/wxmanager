@@ -21,8 +21,37 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="springboot.wxcms.entity.AccountFans">
     <result column="nickname" jdbcType="BINARY" property="nickname" />
   </resultMap>
+
+
+  <select id="getFansListByPage" resultMap="BaseResultMap">
+    SELECT * FROM wxcms_account_fans
+    <where>
+      <if test="nicknameStr != null">
+        nick_name LIKE concat('%',#{nicknameStr},'%')
+      </if>
+      <if test="account != null">
+        and account = #{account}
+      </if>
+    </where>
+    ORDER BY create_time desc
+  </select>
+
+  <select id="getFansByOpenIdListByPage" resultMap="BaseResultMap" parameterType="list">
+    SELECT * FROM wxcms_account_fans WHERE OPEN_ID IN
+    <foreach collection="list"  item="item" open="(" separator="," close=")">
+      #{item.openId}
+    </foreach>
+    ORDER BY  CREATE_TIME DESC
+  </select>
+
+
+
+
+
+
+
   <sql id="Base_Column_List">
-    id, create_time, city, country, gender, headimgurl, language, nickname_str, open_id, 
+    id, create_time, city, country, gender, headimgurl, language, nickname_str, open_id,
     province, remark, status, subscribe_status, subscribe_time, wxid
   </sql>
   <sql id="Blob_Column_List">
@@ -36,7 +65,7 @@
     from account_fans
     where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from account_fans
     where id = #{id,jdbcType=VARCHAR}
   </delete>

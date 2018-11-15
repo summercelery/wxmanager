@@ -18,11 +18,6 @@
  */
 package springboot.wxapi.process;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.util.QuickWriter;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import com.thoughtworks.xstream.io.xml.XppDriver;
 import com.wxmp.wxapi.vo.*;
 import org.dom4j.Document;
 import org.dom4j.Element;

@@ -6,10 +6,6 @@ import springboot.wxcms.entity.SysUser;
 public interface SysUserMapper{
 
     @ResultMap("BaseResultMap")
-    @Select("select * from user where id = #{id}")
-    SysUser findUserById(String id);
-
-    @ResultMap("BaseResultMap")
     @Select("select * from user where email = #{email}")
     SysUser findUserByEmail(String email);
 
@@ -19,6 +15,18 @@ public interface SysUserMapper{
 
     @Select("select count(1) from user where phone = #{phone}")
     Integer countUserNumByPhone(String phone);
+
+
+    @ResultMap("BaseResultMap")
+    @Select("select * from sys_user where login_name = #{loginName}")
+    SysUser findSysUserByLoginName(String loginName);
+
+    @Select("select count(1) from sys_user where login_name = #{loginName}")
+    Integer countUserNumByLoginName(String loginName);
+
+
+    @Update("update sys_user set password = #{password} ,update_time = #{updateTime} WHERE id = #{id}")
+    Integer updateLoginPwd(SysUser sysUser);
 
 
     int deleteByPrimaryKey(String id);

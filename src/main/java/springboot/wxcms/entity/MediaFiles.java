@@ -26,6 +26,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -41,7 +42,7 @@ public class MediaFiles extends BaseEntity implements Serializable {
    	private String mediaId;//素材media_id
    	private String uploadUrl;//项目中上传路径
    	private String rmk;
-   	private Date updateTime;
+   	private LocalDateTime updateTime;
    	private Long baseId;//消息主表id
 
 	@Transient

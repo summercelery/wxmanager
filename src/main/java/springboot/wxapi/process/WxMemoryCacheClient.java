@@ -1,29 +1,11 @@
-/*
- * FileName：WxMemoryCacheClient.java 
- * <p>
- * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
- * <p>
- * Licensed under the GNU General Public License, Version 3 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/gpl-3.0.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- */
+
 package springboot.wxapi.process;
-
-import com.google.common.collect.Maps;
-import com.wxmp.core.util.CacheUtils;
-import com.wxmp.wxcms.domain.Account;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import springboot.core.util.CacheUtils;
+import springboot.wxcms.entity.Account;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +22,9 @@ public class WxMemoryCacheClient {
 	public static final String SESSION_ACCOUNT= "session_account";
 
 	public static void addMpAccount(List<Account> accounts){
-		Map<String,MpAccount> mpAccountMap = (Map<String, MpAccount>) CacheUtils.get("mpAccountMap");
+		Map<String,MpAccount> mpAccountMap =(Map<String,MpAccount>)CacheUtils.get("mpAccountMap");
 		if(mpAccountMap==null){
-			mpAccountMap=Maps.newHashMap();
+			mpAccountMap= new HashMap<>();
 		}
 		if (CollectionUtils.isNotEmpty(accounts)) {
 			for (MpAccount account:accounts) {
@@ -65,10 +47,10 @@ public class WxMemoryCacheClient {
 	public static AccessToken addAccessToken(String account ,AccessToken token){
 		Map<String,AccessToken> accountAccessTokenMap = (Map<String, AccessToken>) CacheUtils.get("accountAccessTokenMap");
 		if(accountAccessTokenMap==null){
-			accountAccessTokenMap=Maps.newHashMap();
+			accountAccessTokenMap=new HashMap<>();
 		}
 		if (null == accountAccessTokenMap) {
-			accountAccessTokenMap = Maps.newHashMap();
+			accountAccessTokenMap = new HashMap<>();
 		}
 		if(token != null){
 			accountAccessTokenMap.put(account, token);
@@ -84,7 +66,7 @@ public class WxMemoryCacheClient {
 	public static AccessToken getAccessToken(){
 		Map<String,AccessToken> accountAccessTokenMap = (Map<String, AccessToken>) CacheUtils.get("accountAccessTokenMap");
 		if(accountAccessTokenMap==null){
-			accountAccessTokenMap=Maps.newHashMap();
+			accountAccessTokenMap=new HashMap<>();
 		}
 		return accountAccessTokenMap.get(getAccount());
 	}
@@ -98,7 +80,7 @@ public class WxMemoryCacheClient {
 	public static JSTicket addJSTicket(String account ,JSTicket jsTicket){
 		Map<String,JSTicket> accountJSTicketMap = (Map<String, JSTicket>) CacheUtils.get("accountJSTicketMap");
 		if(null==accountJSTicketMap){
-			accountJSTicketMap=Maps.newHashMap();
+			accountJSTicketMap=new HashMap<>();
 		}
 		if(jsTicket != null){
 			accountJSTicketMap.put(account, jsTicket);
@@ -114,7 +96,7 @@ public class WxMemoryCacheClient {
 	public static JSTicket getJSTicket(){
 		Map<String,JSTicket> accountJSTicketMap = (Map<String, JSTicket>) CacheUtils.get("accountJSTicketMap");
 		if(null==accountJSTicketMap){
-			accountJSTicketMap=Maps.newHashMap();
+			accountJSTicketMap=new HashMap<>();
 		}
 		return accountJSTicketMap.get(getAccount());
 	}
@@ -123,7 +105,7 @@ public class WxMemoryCacheClient {
 	public static String getOpenid(String sessionid){
 		Map<String,String> sessionOpenIdMap = (Map<String,String>) CacheUtils.get("sessionOpenIdMap");
 		if(null==sessionOpenIdMap){
-			sessionOpenIdMap=Maps.newHashMap();
+			sessionOpenIdMap=new HashMap<>();
 		}
 		if(!StringUtils.isBlank(sessionid)){
 			return sessionOpenIdMap.get(sessionid);
@@ -134,7 +116,7 @@ public class WxMemoryCacheClient {
 	public static String setOpenid(String sessionid, String openid){
 		Map<String,String> sessionOpenIdMap = (Map<String,String>) CacheUtils.get("sessionOpenIdMap");
 		if(null==sessionOpenIdMap){
-			sessionOpenIdMap=Maps.newHashMap();
+			sessionOpenIdMap=new HashMap<>();
 		}
 		if(!StringUtils.isBlank(sessionid) && !StringUtils.isBlank(openid)){
 			sessionOpenIdMap.put(sessionid, openid);
@@ -147,7 +129,7 @@ public class WxMemoryCacheClient {
 	public static AccessToken addOAuthAccessToken(String account ,OAuthAccessToken token){
 		Map<String,OAuthAccessToken> accountOAuthTokenMap = (Map<String, OAuthAccessToken>) CacheUtils.get("accountOAuthTokenMap");
 		if(null==accountOAuthTokenMap){
-			accountOAuthTokenMap=Maps.newHashMap();
+			accountOAuthTokenMap=new HashMap<>();
 		}
 		if(token != null){
 			accountOAuthTokenMap.put(account, token);
@@ -163,7 +145,7 @@ public class WxMemoryCacheClient {
 	public static OAuthAccessToken getOAuthAccessToken(){
 		Map<String,OAuthAccessToken> accountOAuthTokenMap = (Map<String, OAuthAccessToken>) CacheUtils.get("accountOAuthTokenMap");
 		if(null==accountOAuthTokenMap){
-			accountOAuthTokenMap=Maps.newHashMap();
+			accountOAuthTokenMap=new HashMap<>();
 		}
 		return accountOAuthTokenMap.get(getAccount());
 	}

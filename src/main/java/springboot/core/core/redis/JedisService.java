@@ -54,10 +54,11 @@ public class JedisService {
         }
 
     }
-    public void set(String key ,String value){
+    public void set(String key ,String value,Integer index){
         Jedis jedis = null;
         try{
             jedis = getResource();
+            jedis.select(index);
             // NX是不存在时才set， XX是存在时才set， EX是秒，PX是毫秒
             if(jedis.exists(key)){
                 jedis.set(key,value,"XX");

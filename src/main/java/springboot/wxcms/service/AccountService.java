@@ -1,6 +1,9 @@
 package springboot.wxcms.service;
+import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 import springboot.wxcms.entity.Account;
+import springboot.wxcms.mapper.AccountMapper;
+
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -8,34 +11,35 @@ import java.util.List;
 public class AccountService  {
     
     @Resource
-    private AccountDao entityDao;
+    private AccountMapper accountMapper;
     
-    public Account getById(Long id) {
-        return entityDao.getById(id);
+    public Account getById(String id) {
+        return accountMapper.selectByPrimaryKey(id);
     }
     
     public Account getByAccount(String account) {
-        return entityDao.getByAccount(account);
+        return accountMapper.findByAccount(account);
     }
     
     public List<Account> listForPage(Account searchEntity) {
-        return entityDao.listForPage(searchEntity);
+        PageHelper.startPage(searchEntity.getPageNum(), searchEntity.getPageSize());
+        return accountMapper.findAll();
     }
     
     public void add(Account entity) {
-        entityDao.add(entity);
+        accountMapper.insert(entity);
     }
     
     public void update(Account entity) {
-        entityDao.update(entity);
+        accountMapper.updateByPrimaryKey(entity);
     }
     
     public void delete(Account entity) {
-        entityDao.delete(entity);
+        accountMapper.deleteByPrimaryKey(entity.getId());
     }
     
     public Account getSingleAccount() {
-        return entityDao.getSingleAccount();
+        return accountMapper.getSingleAccount();
     }
     
 }

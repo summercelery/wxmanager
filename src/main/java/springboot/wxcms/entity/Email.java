@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -13,7 +14,7 @@ public class Email extends BaseEntity{
 
     public Email(){
         super();
-        this.createDate = new Date();
+        this.createDate = LocalDateTime.now();
         this.state = "create";
     }
 
@@ -27,7 +28,7 @@ public class Email extends BaseEntity{
 
     private String state;
 
-    private Date sendDate;
+    private LocalDateTime sendDate;
 
-    private Date createDate;
+    private LocalDateTime createDate;
 }

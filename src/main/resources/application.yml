@@ -22,6 +22,12 @@ spring:
     hibernate:
 #     自动创建、更新、验证数据库结构
       ddl-auto: update
+#PageHelp分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 
 mybatis:
 # Mapper文件存放的位置

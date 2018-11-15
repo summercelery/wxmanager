@@ -18,10 +18,16 @@
  */
 package springboot.wxcms.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+import springboot.wxapi.process.MpAccount;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 /**
@@ -30,21 +36,14 @@ import javax.persistence.Table;
 @Data
 @Entity
 @Table(name = "account")
-public class Account extends BaseEntity {
-
+public class Account extends MpAccount {
     private String name;//名称
-    private String account;//账号
-    private String appid;//appid
-    private String appsecret;//appsecret
-    private String url;//验证时用的url
-    private String token;//token
-    //ext
-    private Integer msgcount;//自动回复消息条数;默认是5条
 
-    public Integer getMsgcount() {
-        if (msgcount == null)
-            msgcount = 5;//默认5条
-        return msgcount;
-    }
+    @Id
+    private String id;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
+    //创建时间
+    private LocalDateTime createTime;
 
 }
