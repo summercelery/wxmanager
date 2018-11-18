@@ -3,7 +3,17 @@ package springboot.wxcms.mapper;
 
 import springboot.wxcms.entity.ImgResource;
 
+import java.util.List;
+
 public interface ImgResourceMapper {
+
+
+
+
+    List<ImgResource> getImgListByPage(ImgResource entity);
+
+
+
     int deleteByPrimaryKey(String id);
 
     int insert(ImgResource record);

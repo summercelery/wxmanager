@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import springboot.core.exception.WxErrorException;
+import springboot.core.spring.SpringFreemarkerContextPathUtil;
 import springboot.wxapi.process.MediaType;
 import springboot.wxapi.process.MpAccount;
 import springboot.wxapi.process.WxApiClient;
@@ -27,7 +29,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.wxmp.core.util.DateUtilOld.COMMON_FULL;
+import static springboot.core.util.DateUtilOld.COMMON_FULL;
 
 
 @RestController
@@ -58,7 +60,6 @@ public class MsgNewsController {
      * @return
      */
     @RequestMapping(value = "/sendNewsMaterial", method = RequestMethod.POST)
-    @ResponseBody
     public String sendNewsMaterial(String newsId, HttpServletRequest request) throws Exception {
         String code = "";
         MsgNews msgNews = msgNewsService.getById(newsId);
@@ -202,10 +203,10 @@ public class MsgNewsController {
             if (resultCount > 0) {
                 return Result.ok();
             } else {
-                return Result.failure();
+                return Result.fail("操作失败");
             }
         }
-        return Result.failure();
+        return Result.fail("操作失败");
         
     }
 
@@ -344,7 +345,7 @@ public class MsgNewsController {
                 return Result.ok();
             }
         }
-        return Result.fail("");
+        return Result.fail("操作失败");
     }
 
     /**
@@ -363,12 +364,12 @@ public class MsgNewsController {
 
             try {
                 this.msgNewsService.delete(news);
-                return Result.deleteSuccess();
+                return Result.ok();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return Result.failure();
+        return Result.fail("操作失败");
     }
 
     /**
@@ -464,13 +465,13 @@ public class MsgNewsController {
             try {
                 // 更新成功
                 this.msgNewsService.updateSingleNews(msgNews);
-                return Result.updateSuccess();
+                return Result.ok();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
-        return Result.failure();
+        return Result.fail("操作失败");
     }
 
     /**
@@ -599,9 +600,9 @@ public class MsgNewsController {
                 msgNews.setTitle(article.getTitle());
                 this.msgNewsService.updateMediaId(msgNews);
             }
-            return Result.updateSuccess();
+            return Result.ok();
         } else {
-            return Result.failure();
+            return Result.fail("操作失败");
         }
 
     }

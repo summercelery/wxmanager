@@ -16,8 +16,8 @@ public class UserTagService {
 	@Resource
 	private UserTagMapper userTagMapper;
 
-	public UserTag getById(Integer id) {
-		return userTagMapper.getById(id);
+	public UserTag getById(String id) {
+		return userTagMapper.selectByPrimaryKey(id);
 	}
 
 	public List<UserTag> listForPage(UserTag searchEntity) {
@@ -25,14 +25,14 @@ public class UserTagService {
 	}
 
 	public void add(UserTag entity) {
-		userTagMapper.add(entity);
+		userTagMapper.insert(entity);
 	}
 
 	public void update(UserTag entity) {
-		userTagMapper.update(entity);
+		userTagMapper.updateByPrimaryKey(entity);
 	}
 	public void delete(UserTag entity) {
-		userTagMapper.delete(entity);
+		userTagMapper.deleteByPrimaryKey(entity);
 	}
 
 	public Integer deleteBatchIds(String[] ids) {

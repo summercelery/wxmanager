@@ -20,14 +20,15 @@ package springboot.wxapi.process;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.wxmp.wxapi.vo.Article;
-import com.wxmp.wxapi.vo.MsgRequest;
-import com.wxmp.wxapi.vo.MsgResponseNews;
-import com.wxmp.wxapi.vo.MsgResponseText;
-import com.wxmp.wxcms.domain.MsgNews;
-import com.wxmp.wxcms.domain.MsgText;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import springboot.wxapi.vo.Article;
+import springboot.wxapi.vo.MsgRequest;
+import springboot.wxapi.vo.MsgResponseNews;
+import springboot.wxapi.vo.MsgResponseText;
+import springboot.wxcms.entity.MsgNews;
+import springboot.wxcms.entity.MsgText;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,13 +51,13 @@ public class WxMessageBuilder {
 	
 	
 	//获取 MsgResponseText 对象
-	public static MsgResponseText getMsgResponseText(MsgRequest msgRequest,MsgText msgText){
+	public static MsgResponseText getMsgResponseText(MsgRequest msgRequest, MsgText msgText){
 		if(msgText != null){
 			MsgResponseText reponseText = new MsgResponseText();
 			reponseText.setToUserName(msgRequest.getFromUserName());
 			reponseText.setFromUserName(msgRequest.getToUserName());
 			reponseText.setMsgType(MsgType.Text.toString());
-			reponseText.setCreateTime(new Date().getTime());
+			reponseText.setCreateTime(System.currentTimeMillis());
 			reponseText.setContent(msgText.getContent());
 			return reponseText;
 		}else{
@@ -65,13 +66,13 @@ public class WxMessageBuilder {
 	}
 	
 	//获取 MsgResponseNews 对象
-	public static MsgResponseNews getMsgResponseNews(MsgRequest msgRequest,List<MsgNews> msgNews){
+	public static MsgResponseNews getMsgResponseNews(MsgRequest msgRequest, List<MsgNews> msgNews){
 		if(msgNews != null && msgNews.size() > 0){
 			MsgResponseNews responseNews = new MsgResponseNews();
 			responseNews.setToUserName(msgRequest.getFromUserName());
 			responseNews.setFromUserName(msgRequest.getToUserName());
 			responseNews.setMsgType(MsgType.News.toString());
-			responseNews.setCreateTime(new Date().getTime());
+			responseNews.setCreateTime(System.currentTimeMillis());
 			responseNews.setArticleCount(msgNews.size());
 			List<Article> articles = new ArrayList<Article>(msgNews.size());
 			for(MsgNews n : msgNews){

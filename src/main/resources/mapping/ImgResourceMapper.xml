@@ -14,6 +14,27 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="url" jdbcType="VARCHAR" property="url" />
   </resultMap>
+
+  <select id="getImgListByPage" parameterType="springboot.wxcms.entity.ImgResource" resultMap="BaseResultMap">
+    SELECT * FROM img_resource t
+    <where>
+      <if test="account != null">
+        t.account = #{account}
+      </if>
+      <if test="start!=null and start!='' and end!=null and end!=''">
+        and (t.create_time
+        between
+        str_to_date(#{start}, '%Y-%m-%d')
+        and
+        str_to_date(#{end}, '%Y-%m-%d'))
+      </if>
+    </where>
+    ORDER BY t.create_time desc
+  </select>
+
+
+
+
   <sql id="Base_Column_List">
     id, create_time, flag, http_url, media_id, name, size, true_name, type, update_time, 
     url
@@ -24,7 +45,7 @@
     from img_resource
     where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from img_resource
     where id = #{id,jdbcType=VARCHAR}
   </delete>

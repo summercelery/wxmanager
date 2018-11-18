@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import springboot.core.constant.Constants;
+import springboot.core.exception.WxErrorException;
 import springboot.wxapi.process.MpAccount;
 import springboot.wxapi.process.WxApiClient;
+import springboot.wxapi.process.WxMemoryCacheClient;
 import springboot.wxcms.entity.AccountFans;
 import springboot.wxcms.entity.Result;
 import springboot.wxcms.entity.UserTag;
@@ -25,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/userTag")
-public class UserTagCtrl {
+public class UserTagController {
 
 	@Autowired
 	private UserTagService userTagService;
@@ -99,7 +101,7 @@ public class UserTagCtrl {
 		if (entity.getId() != null) {
 			userTagService.update(entity);
 			//更新成功
-			return Result.updateSuccess();
+			return Result.ok();
 		} else {
 			//添加分两步
 			//1. 调用微信API添加 
@@ -115,9 +117,9 @@ public class UserTagCtrl {
 				JSONObject returnUserTag = (JSONObject) userTag.get("tag");
 				entity = JSONObject.parseObject(returnUserTag.toJSONString(), UserTag.class);
 				userTagService.add(entity);
-				return Result.saveSuccess();
+				return Result.ok();
 			}
-			return Result.failure(Constants.MSG_ERROR);
+			return Result.fail(Constants.MSG_ERROR);
 		}
 	}
 
@@ -133,9 +135,9 @@ public class UserTagCtrl {
 		if(deleteUserTag(entity.getId())){
 			//2.删除本地数据库的用户标签
 			userTagService.delete(entity);
-			return Result.deleteSuccess();
+			return Result.ok();
 		}
-		return Result.failure("用户标签删除失败！");
+		return Result.fail("用户标签删除失败！");
 	}
 	
 	/**
@@ -149,16 +151,16 @@ public class UserTagCtrl {
 		if(null != ids && ids.length>0) {
 			int nums = 0;
 			for (String id : ids) {
-				if(deleteUserTag(Integer.parseInt(id))) {
+				if(deleteUserTag(id)) {
 					nums++;
 				}
 			}
 			if(nums == ids.length) {
 				userTagService.deleteBatchIds(ids);
 			}
-			return Result.deleteSuccess();
+			return Result.ok();
 		}else {
-			return Result.failure("用户标签批量删除失败");
+			return Result.fail("用户标签批量删除失败");
 		}
 	}
 	/**
@@ -166,7 +168,7 @@ public class UserTagCtrl {
 	 * @param id
 	 * @return boolean
 	 */
-	private boolean deleteUserTag(Integer id) {
+	private boolean deleteUserTag(String id) {
 		MpAccount mpAccount = WxMemoryCacheClient.getMpAccount();//获取缓存中的唯一账号
 		JSONObject  tag = new JSONObject();
 		JSONObject  tagId = new JSONObject();

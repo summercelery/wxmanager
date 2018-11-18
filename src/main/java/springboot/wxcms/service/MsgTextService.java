@@ -55,7 +55,7 @@ public class MsgTextService {
         for (String id : ids) {
             MsgBase base = new MsgBase();
             MsgText msgText = new MsgText();
-            base.setId(Long.valueOf(id));
+            base.setId(id);
             msgText.setBaseId(Long.valueOf(id));
 			msgTextMapper.delete(msgText);
             baseDao.delete(base);

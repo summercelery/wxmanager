@@ -1,28 +1,18 @@
-/*
- * FileName：WxApiClient.java 
- * <p>
- * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
- * <p>
- * Licensed under the GNU General Public License, Version 3 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/gpl-3.0.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- */
+
 package springboot.wxapi.process;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import springboot.core.exception.WxError;
+import springboot.core.exception.WxErrorException;
 import springboot.core.util.wx.WxUtil;
+import springboot.wxapi.vo.Material;
+import springboot.wxapi.vo.MaterialArticle;
+import springboot.wxapi.vo.MaterialItem;
+import springboot.wxapi.vo.TemplateMessage;
 import springboot.wxcms.entity.AccountFans;
 import springboot.wxcms.entity.MsgNews;
 

@@ -3,6 +3,10 @@ package springboot.wxapi.process;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import springboot.core.exception.WxError;
+import springboot.core.exception.WxErrorException;
+import springboot.core.util.MyTrustManager;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;

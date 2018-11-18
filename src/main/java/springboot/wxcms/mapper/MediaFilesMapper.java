@@ -3,7 +3,12 @@ package springboot.wxcms.mapper;
 
 import springboot.wxcms.entity.MediaFiles;
 
+import java.util.List;
+
 public interface MediaFilesMapper {
+
+    List<MediaFiles> getMediaListByPage(MediaFiles mediaFiles);
+
     int deleteByPrimaryKey(String id);
 
     int insert(MediaFiles record);

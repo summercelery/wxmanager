@@ -18,6 +18,53 @@
     id, create_time, base_id, introduction, logic_class, media_id, media_type, rmk, title, 
     update_time, upload_url
   </sql>
+
+  <!-- 条件查询单条数据 -->
+  <select id="getFileBySou" parameterType="springboot.wxcms.entity.MediaFiles"
+          resultMap="BaseResultMap">
+    SELECT * FROM wxcms_media_files WHERE
+    <where>
+      1=1
+      <if test="mediaId!=null and mediaId!='' ">
+        and media_id = #{mediaId}
+      </if>
+      <if test="baseId!=null and baseId!='' ">
+        and base_id = #{baseId}
+      </if>
+      <if test="id!=null and id!='' ">
+        and id = #{id}
+      </if>
+    </where>
+
+  </select>
+  <!-- 模糊分页 -->
+  <select id="getMediaListByPage" parameterType="springboot.wxcms.entity.MediaFiles" resultMap="BaseResultMap">
+    SELECT  t.* FROM wxcms_media_files t
+    <where>
+      1=1
+      <if test="mediaType!=null and mediaType!='' ">
+        and t.media_type = #{mediaType}
+      </if>
+      <if test="title!=null and title!='' ">
+        and t.title like concat('%',#{title},'%')
+      </if>
+      <if test="start!=null and start!='' and end!=null and end!=''">
+        and (t.create_time
+        between
+        str_to_date(#{start}, '%Y-%m-%d')
+        and
+        str_to_date(#{end}, '%Y-%m-%d'))
+      </if>
+      <if test="account != null">
+        and t.account = #{account}
+      </if>
+    </where>
+    ORDER BY t.create_time desc
+  </select>
+
+
+
+
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

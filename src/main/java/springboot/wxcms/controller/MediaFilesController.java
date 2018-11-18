@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import springboot.core.exception.WxErrorException;
 import springboot.core.util.PropertiesUtil;
 import springboot.wxapi.process.MpAccount;
 import springboot.wxapi.process.WxApi;
@@ -54,7 +55,7 @@ public class MediaFilesController  {
      * @throws WxErrorException
      */
     @RequestMapping(value = "/addVideo")
-    public Result addVideo(MediaFiles mediaFile) throws WxErrorException{
+    public Result addVideo(MediaFiles mediaFile) throws WxErrorException {
     	MpAccount mpAccount = WxMemoryCacheClient.getMpAccount();
     	String accessToken = WxApiClient.getAccessToken(mpAccount);
     	Map<String,String> params=new HashMap<>();
@@ -80,7 +81,7 @@ public class MediaFilesController  {
     public Result delMediaFile(String mediaId) throws WxErrorException{
 		WxApiClient.deleteMaterial(mediaId,WxMemoryCacheClient.getMpAccount());
     	mediaFileService.deleteByMediaId(mediaId);
-    	return Result.deleteSuccess();
+    	return Result.ok();
     }
     
     /**
@@ -194,7 +195,7 @@ public class MediaFilesController  {
 	    	mediaFile.setCreateTime(LocalDateTime.now());
 	    	mediaFile.setUpdateTime(LocalDateTime.now());
 	    	mediaFileService.add(mediaFile);
-			return Result.saveSuccess();
+			return Result.ok();
     	}
     }
 }

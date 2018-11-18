@@ -2,9 +2,13 @@ package springboot.wxcms.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 
 @Data
+@Entity
+@Table(name = "msg_base")
 public class MsgBase extends BaseEntity {
     private String msgtype;//消息类型;
     private String inputcode;//关注者发送的消息

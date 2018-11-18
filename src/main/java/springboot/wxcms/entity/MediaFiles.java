@@ -43,7 +43,7 @@ public class MediaFiles extends BaseEntity implements Serializable {
    	private String uploadUrl;//项目中上传路径
    	private String rmk;
    	private LocalDateTime updateTime;
-   	private Long baseId;//消息主表id
+   	private String baseId;//消息主表id
 
 	@Transient
 	private String start;

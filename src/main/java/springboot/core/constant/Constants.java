@@ -45,7 +45,7 @@ public class Constants {
 	/**
 	 * 成功提示
 	 **/
-	public static final String MSG_SUCCESS = "信息操作成功!";
+	public static final String MSG_SUCCESS = "操作成功!";
 
 	/**
 	 * 保存成功提示

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import springboot.core.exception.BusinessException;
 import springboot.wxcms.entity.Result;
 import springboot.wxcms.entity.TplMsgText;
 import springboot.wxcms.service.TplMsgTextService;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tplmsgtext")
-public class TplMsgTextCtrl {
+public class TplMsgTextController {
 
 	@Autowired
 	private TplMsgTextService tplMsgTextService;
@@ -28,7 +29,7 @@ public class TplMsgTextCtrl {
 	}
 
 	@RequestMapping(value = "/list")
-	public  Result list(TplMsgText searchEntity) throws BusinessException{
+	public  Result list(TplMsgText searchEntity) throws BusinessException {
 		List<TplMsgText> pageList = tplMsgTextService.getTplMsgTextByPage(searchEntity);
 		return Result.ok(pageList);
 	}
@@ -44,18 +45,18 @@ public class TplMsgTextCtrl {
 		if (entity.getId() != null) {
 			tplMsgTextService.update(entity);
 			//更新成功
-			return Result.updateSuccess();
+			return Result.ok();
 		} else {
 			//添加成功
 			tplMsgTextService.add(entity);
-			return Result.saveSuccess();
+			return Result.ok();
 		}
 	}
 
 	@RequestMapping(value = "/deleteById")
 	public Result deleteById(String baseId) {
 		tplMsgTextService.delete(baseId);
-		return Result.deleteSuccess();
+		return Result.ok();
 	}
 
 }

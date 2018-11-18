@@ -4,6 +4,10 @@ package springboot.wxcms.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springboot.wxapi.process.MsgType;
+import springboot.wxcms.entity.MediaFiles;
+import springboot.wxcms.entity.MsgArticle;
+import springboot.wxcms.entity.MsgBase;
 import springboot.wxcms.entity.MsgNews;
 
 import javax.annotation.Resource;
@@ -14,7 +18,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class MsgNewsService implements MsgNewsService{
+public class MsgNewsService{
 
 	@Resource
 	private MsgBaseDao baseDao;
@@ -92,10 +96,7 @@ public class MsgNewsService implements MsgNewsService{
 		return msgNewsDao.getByBaseId(baseid);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.wxmp.wxcms.service.MsgNewsService#updateMediaId(com.wxmp.wxcms.domain.MsgNews)
-	 */
-	@Override
+
 	public int updateMediaId(MsgNews entity) {
 		int n = 0 ;
 		try {
@@ -109,7 +110,6 @@ public class MsgNewsService implements MsgNewsService{
 
 
 	@Transactional  
-	@Override
 	public int addSingleNews(MsgNews news,MediaFiles entity) {
 		int n=0;
 	    int m = 0;
@@ -161,7 +161,6 @@ public class MsgNewsService implements MsgNewsService{
 	
 	
 	
-	@Override
 	public int addMediaFiles(MediaFiles entity) {
 		int n=0;
 	    
@@ -280,10 +279,8 @@ public class MsgNewsService implements MsgNewsService{
 	}
 
 	/* (non-Javadoc)修改单图文
-	 * @see com.wxmp.wxcms.service.MsgNewsService#updateSingleNews(com.wxmp.wxcms.domain.MsgNews)
 	 */
 	@Transactional
-	@Override
 	public void updateSingleNews(MsgNews news) {
     	MsgArticle art = new MsgArticle();
 		art.setAuthor(news.getAuthor());
@@ -305,10 +302,6 @@ public class MsgNewsService implements MsgNewsService{
 		this.msgNewsDao.updateNews(news);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.wxmp.wxcms.service.MsgNewsService#getByMediaId(java.lang.String)
-	 */
-	@Override
 	public List<MsgNews> getByMediaId(String mediaId) {
 		// TODO Auto-generated method stub
 		return this.msgNewsDao.getByMediaId(mediaId);

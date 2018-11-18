@@ -1,67 +1,48 @@
-/*
- * FileName：WxCmsCtrl.java 
- * <p>
- * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
- * <p>
- * Licensed under the GNU General Public License, Version 3 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/gpl-3.0.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- */
+
 package springboot.wxcms.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.wxmp.core.common.BaseCtrl;
-import com.wxmp.core.spring.SpringFreemarkerContextPathUtil;
-import com.wxmp.core.util.AjaxResult;
-import com.wxmp.core.util.PropertiesConfigUtil;
-import com.wxmp.core.util.UploadUtil;
-import com.wxmp.wxapi.process.MediaType;
-import com.wxmp.wxapi.process.MpAccount;
-import com.wxmp.wxapi.process.WxApiClient;
-import com.wxmp.wxapi.process.WxMemoryCacheClient;
-import com.wxmp.wxapi.vo.Material;
-import com.wxmp.wxapi.vo.MaterialArticle;
-import com.wxmp.wxapi.vo.MaterialItem;
-import com.wxmp.wxcms.domain.*;
-import com.wxmp.wxcms.mapper.AccountDao;
-import com.wxmp.wxcms.service.MsgNewsService;
-import com.wxmp.wxcms.service.SysUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
+import springboot.core.spring.SpringFreemarkerContextPathUtil;
+import springboot.core.util.PropertiesConfigUtil;
+import springboot.core.util.UploadUtil;
+import springboot.wxapi.process.MediaType;
+import springboot.wxapi.process.MpAccount;
+import springboot.wxapi.process.WxApiClient;
+import springboot.wxapi.process.WxMemoryCacheClient;
+import springboot.wxapi.vo.Material;
+import springboot.wxapi.vo.MaterialArticle;
+import springboot.wxapi.vo.MaterialItem;
+import springboot.wxcms.entity.*;
+import springboot.wxcms.mapper.AccountMapper;
+import springboot.wxcms.service.MsgNewsService;
+import springboot.wxcms.service.SysUserService;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
-@Controller
+@RestController
 @RequestMapping("/wxcms")
-public class WxCmsCtrl extends BaseCtrl {
+public class WxCmsController {
 
 	@Resource
-	AccountDao accountDao;
+	AccountMapper accountMapper;
 	
 	@Autowired
 	private SysUserService sysUserService;
@@ -70,9 +51,9 @@ public class WxCmsCtrl extends BaseCtrl {
 	private MsgNewsService msgNewsService;
 
 	@RequestMapping(value = "/urltoken")
-	@ResponseBody
-	public AjaxResult urltoken() {
-		List<Account> accounts = accountDao.listForPage(null);
+	public Result urltoken() {
+
+		List<Account> accounts = accountMapper.findAll();
 		Account account = new Account();
 		if (!CollectionUtils.isEmpty(accounts)) {
 			for (Account acc : accounts) {
@@ -89,30 +70,29 @@ public class WxCmsCtrl extends BaseCtrl {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("account", account);
 		data.put("msgCountList", msgCountList);
-		return AjaxResult.success(data);
+		return Result.ok(data);
 	}
 
 	@RequestMapping(value = "/getUrl")
-	@ResponseBody
-	public AjaxResult getUrl(Account account){
+	public Result getUrl(Account account){
 		String url = "/wxapi/" + account.getAccount() + "/message.html";
 		
 		if(account.getId() == null){//新增
 			account.setUrl(url);
 			account.setToken(UUID.randomUUID().toString().replace("-", ""));
-			account.setCreatetime(new Date());
-			accountDao.add(account);
+			account.setCreateTime(LocalDateTime.now());
+			accountMapper.insert(account);
 		}else{//更新
-			Account tmpAccount = accountDao.getById(account.getId());
+			Account tmpAccount = accountMapper.selectByPrimaryKey(account.getId());
 			tmpAccount.setUrl(url);
 			tmpAccount.setAccount(account.getAccount());
 			tmpAccount.setAppid(account.getAppid());
 			tmpAccount.setAppsecret(account.getAppsecret());
 			tmpAccount.setMsgcount(account.getMsgcount());
 			tmpAccount.setName(account.getName());
-			accountDao.update(tmpAccount);
+			accountMapper.updateByPrimaryKey(tmpAccount);
 		}
-		return AjaxResult.success(account);
+		return Result.ok(account);
 	}
 	
 	@RequestMapping(value = "/ckeditorImage")
@@ -230,10 +210,10 @@ public class WxCmsCtrl extends BaseCtrl {
 	
 	//获取永久素材
 	@RequestMapping(value = "/getMaterials")
-	public AjaxResult syncMaterials(MaterialArticle materialArticle) throws Exception{
+	public Result syncMaterials(MaterialArticle materialArticle) throws Exception{
 		List<MaterialArticle> materialList = new ArrayList<MaterialArticle>();
 		MpAccount mpAccount = WxMemoryCacheClient.getMpAccount();//获取缓存中的唯一账号
-		Material material = WxApiClient.syncBatchMaterial(MediaType.News, materialArticle.getPage(), materialArticle.getPageSize(),mpAccount);
+		Material material = WxApiClient.syncBatchMaterial(MediaType.News, materialArticle.getPageNum(), materialArticle.getPageSize(),mpAccount);
 		if(material != null){
 
 			List<MaterialItem> itemList = material.getItems();
@@ -250,7 +230,15 @@ public class WxCmsCtrl extends BaseCtrl {
 				}
 			}
 		}
-		return getResult(materialArticle,materialList);
+
+		Result result = Result.ok(materialList);
+		Page newPage = new Page();
+		newPage.setPageNum(materialArticle.getPageNum());
+		newPage.setPageSize(materialArticle.getPageSize());
+		newPage.setTotal(materialArticle.getTotal());
+		newPage.setPages(materialArticle.getPages());
+		result.setPage(newPage);
+		return result;
 	}
 	
 	@RequestMapping(value="/saveFile")
