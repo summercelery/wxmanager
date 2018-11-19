@@ -18,11 +18,11 @@
  */
 package springboot.core.spring;
 
-import com.wxmp.core.exception.UnexpectedException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import springboot.core.exception.UnexpectedException;
 
 import java.util.Map;
 
@@ -40,6 +40,7 @@ public class SpringContextHolder implements ApplicationContextAware {
 	/**
 	 * 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量.
 	 */
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		SpringContextHolder.applicationContext = applicationContext;
 	}
