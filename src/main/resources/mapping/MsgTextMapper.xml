@@ -8,6 +8,31 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="title" jdbcType="VARCHAR" property="title" />
   </resultMap>
+
+  <select id="getMsgTextByPage" parameterType="springboot.wxcms.entity.MsgText" resultMap="BaseResultMap">
+    SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_msg_text t , wxcms_msg_base b
+    WHERE t.base_id = b.id
+    <if test="inputcode != '' and inputcode != null">
+      and b.input_code=#{inputcode}
+    </if>
+    <if test="account != null">
+      and account = #{account}
+    </if>
+    ORDER BY b.create_time DESC
+  </select>
+
+  <select id="getMsgTextList" parameterType="springboot.wxcms.entity.MsgText" resultMap="BaseResultMap">
+    SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_msg_text t , wxcms_msg_base b
+    WHERE t.base_id = b.id
+    <if test="inputcode != '' and inputcode != null">
+      and b.input_code=#{inputcode}
+    </if>
+    <if test="account != null">
+      and account = #{account}
+    </if>
+    ORDER BY b.create_time DESC
+  </select>
+
   <sql id="Base_Column_List">
     id, create_time, base_id, content, title
   </sql>

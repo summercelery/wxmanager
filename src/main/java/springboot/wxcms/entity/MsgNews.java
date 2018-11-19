@@ -41,7 +41,7 @@ public class MsgNews extends MsgBase{
 	private Integer showpic;//是否显示图片
 	private String url;//图文消息原文链接
 	private String fromurl;//外部链接
-	private Long baseId;//消息主表id
+	private String baseId;//消息主表id
 	private String mediaId; //媒体id
 	private String thumbMediaId;//封面图片id
 	private Integer newsIndex;//多图文中的第几条

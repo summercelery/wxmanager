@@ -7,6 +7,28 @@
     <result column="count" jdbcType="INTEGER" property="count" />
     <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
+
+  <select id="getUserTagListByPage" parameterType="springboot.wxcms.entity.UserTag" resultMap="BaseResultMap">
+    SELECT * FROM wxcms_user_tag
+    <trim prefix="where" prefixOverrides="and|or">
+      1=1
+      <if test="name != null and name != '' ">
+        AND  NAME = #{name}
+      </if>
+    </trim>
+    ORDER BY ID
+  </select>
+
+  <delete id="deleteBatchIds" parameterType="list">
+    DELETE FROM wxcms_user_tag WHERE ID IN
+    <foreach collection="array"  item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+
+
   <sql id="Base_Column_List">
     id, create_time, count, name
   </sql>

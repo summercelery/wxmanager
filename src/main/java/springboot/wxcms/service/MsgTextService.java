@@ -2,6 +2,7 @@
 package springboot.wxcms.service;
 
 
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import springboot.wxapi.process.MsgType;
@@ -29,6 +30,7 @@ public class MsgTextService {
     }
 
     public List<MsgText> getMsgTextByPage(MsgText searchEntity) {
+        PageHelper.startPage(searchEntity.getPageNum(),searchEntity.getPageSize());
         return msgTextMapper.getMsgTextByPage(searchEntity);
     }
 
@@ -43,9 +45,9 @@ public class MsgTextService {
     }
 
     public void update(MsgText entity) {
-        MsgBase base = msgBaseMapper.selectByPrimaryKey(entity.getBaseId().toString());
+        MsgBase base = msgBaseMapper.selectByPrimaryKey(entity.getBaseId());
         base.setInputcode(entity.getInputcode());
-        MsgBaseMapper.updateInputcode(base);
+        msgBaseMapper.updateInputcode(base);
         msgTextMapper.updateByPrimaryKey(entity);
     }
 
@@ -56,7 +58,7 @@ public class MsgTextService {
             MsgText msgText = new MsgText();
             base.setId(id);
             msgText.setBaseId(id);
-            msgTextMapper.delete(msgText);
+            msgTextMapper.deleteByPrimaryKey(msgText.getId());
             msgBaseMapper.deleteByPrimaryKey(base.getId());
         }
     }

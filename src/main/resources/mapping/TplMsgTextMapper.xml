@@ -10,6 +10,32 @@
     <result column="tpl_id" jdbcType="VARCHAR" property="tplId" />
     <result column="wx_tpl" jdbcType="VARCHAR" property="wxTpl" />
   </resultMap>
+
+  <select id="getTplMsgTextByPage" parameterType="springboot.wxcms.entity.TplMsgText" resultMap="BaseResultMap">
+    SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_tpl_msg_text t , wxcms_msg_base b
+    WHERE t.base_id = b.id
+    <if test="inputcode != '' and inputcode != null">
+      and b.input_code=#{inputcode}
+    </if>
+    <if test="account != null">
+      and account = #{account}
+    </if>
+    ORDER BY b.create_time DESC
+  </select>
+  <select id="getTplMsgTextList" parameterType="springboot.wxcms.entity.TplMsgText" resultMap="BaseResultMap">
+    SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_tpl_msg_text t , wxcms_msg_base b
+    WHERE t.base_id = b.id
+    <if test="inputcode != '' and inputcode != null">
+      and b.input_code=#{inputcode}
+    </if>
+    <if test="account != null">
+      and account = #{account}
+    </if>
+    ORDER BY b.create_time DESC
+  </select>
+
+
+
   <sql id="Base_Column_List">
     id, create_time, base_id, content, title, tpl_id, wx_tpl
   </sql>

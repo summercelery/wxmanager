@@ -10,12 +10,6 @@ import springboot.wxcms.mapper.MsgNewsMapper;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- *
- * @author hermit
- * @version 2.0
- * @date 2018-04-17 10:54:58
- */
 @Service
 public class MsgArticleService {
 
@@ -25,7 +19,7 @@ public class MsgArticleService {
 	@Resource
 	private MsgNewsMapper msgNewsMapper;
 	
-	public List<MsgArticle> getByNewsId(int id) {
+	public List<MsgArticle> getByNewsId(String id) {
 		// TODO Auto-generated method stub
 		return msgArticleMapper.getByNewsId(id);
 	}
@@ -68,7 +62,7 @@ public class MsgArticleService {
 		msgArticleMapper.deleteByPrimaryKey(id);
 	}
 
-	public void deleteByBatch(int id) {
+	public void deleteByBatch(String id) {
 		// TODO Auto-generated method stub
 		msgArticleMapper.deleteByBatch(id);
 	}

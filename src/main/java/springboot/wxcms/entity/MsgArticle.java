@@ -47,5 +47,5 @@ public class MsgArticle  extends BaseEntity implements Serializable {
 	private String contentSourceUrl;
 	private String mediaId;
 	private Integer newsIndex;
-	private Integer newsId;
+	private String newsId;
 }

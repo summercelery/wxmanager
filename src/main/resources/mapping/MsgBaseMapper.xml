@@ -11,6 +11,20 @@
     <result column="readcount" jdbcType="INTEGER" property="readcount" />
     <result column="rule" jdbcType="VARCHAR" property="rule" />
   </resultMap>
+
+  <select id="listForPage" parameterType="springboot.wxcms.entity.MsgBase" resultMap="BaseResultMap">
+    SELECT * FROM wxcms_msg_base
+    <trim prefix="where" prefixOverrides="and|or">
+      1=1
+      <if test="msgtype != null and msgtype != '' ">
+        AND  MSG_TYPE = #{msgtype}
+      </if>
+    </trim>
+    ORDER BY ID
+  </select>
+
+
+
   <sql id="Base_Column_List">
     id, create_time, enable, favourcount, inputcode, msgtype, readcount, rule
   </sql>

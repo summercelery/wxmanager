@@ -18,6 +18,40 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="url" jdbcType="VARCHAR" property="url" />
   </resultMap>
+
+  <insert id="insertByBatch" parameterType="java.util.List">
+    insert into msg_article
+    (TITLE,
+    AUTHOR,
+    CONTENT,
+    DIGEST,
+    SHOW_COVER_PIC,
+    URL,
+    PIC_URL,
+    THUMB_MEDIA_ID,
+    MEDIA_ID,
+    CONTENT_SOURCE_URL,
+    NEWS_ID,
+    NEWS_INDEX)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (
+      #{item.title},
+      #{item.author},
+      #{item.content},
+      #{item.digest},
+      #{item.showCoverPic},
+      #{item.url},
+      #{item.picUrl},
+      #{item.thumbMediaId},
+      #{item.mediaId},
+      #{item.contentSourceUrl},
+      #{item.newsId},
+      #{item.newsIndex})
+    </foreach>
+  </insert>
+
+
   <sql id="Base_Column_List">
     id, create_time, ar_id, author, content, content_source_url, digest, media_id, news_id, 
     news_index, pic_url, show_cover_pic, thumb_media_id, title, url

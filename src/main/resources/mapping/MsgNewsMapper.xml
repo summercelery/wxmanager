@@ -23,6 +23,50 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="url" jdbcType="VARCHAR" property="url" />
   </resultMap>
+
+
+
+  <select id="getWebNewsListByPage" parameterType="springboot.wxcms.entity.MsgNews" resultMap="BaseResultMap">
+    SELECT  t.* FROM wxcms_msg_news t
+    <where>
+
+      <if test="multType!=null and multType!='' ">
+        mult_type = #{multType}
+      </if>
+      <if test="title!=null and title!='' ">
+        and title like concat('%',#{title},'%')
+      </if>
+      <if test="start!=null and start!='' and end!=null and end!=''">
+        and (create_time
+        between
+        str_to_date(#{start}, '%Y-%m-%d')
+        and
+        str_to_date(#{end}, '%Y-%m-%d'))
+      </if>
+      <if test="account != null">
+        and account = #{account}
+      </if>
+    </where>
+    ORDER BY t.ID desc
+  </select>
+
+
+  <select id="getMsgNewsByIds" resultMap="BaseResultMap" >
+    SELECT * FROM msg_news WHERE id IN
+    <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+
+
+
+
+
+
+
+
+
   <sql id="Base_Column_List">
     id, create_time, author, base_id, brief, description, end, fanscancomment, fromurl, 
     media_id, mult_type, news_index, opencomment, picdir, picpath, showpic, start, thumb_media_id, 

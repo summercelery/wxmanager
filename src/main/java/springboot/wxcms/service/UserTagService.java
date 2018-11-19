@@ -32,7 +32,7 @@ public class UserTagService {
 		userTagMapper.updateByPrimaryKey(entity);
 	}
 	public void delete(UserTag entity) {
-		userTagMapper.deleteByPrimaryKey(entity);
+		userTagMapper.deleteByPrimaryKey(entity.getId());
 	}
 
 	public Integer deleteBatchIds(String[] ids) {

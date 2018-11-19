@@ -45,7 +45,7 @@ public class TplMsgTextService{
 	}
 
 	public void update(TplMsgText entity){
-		MsgBase base = msgBaseMapper.selectByPrimaryKey(entity.getBaseId().toString());
+		MsgBase base = msgBaseMapper.selectByPrimaryKey(entity.getBaseId());
 		base.setInputcode(entity.getInputcode());
 		msgBaseMapper.updateInputcode(base);
 		tplMsgTextMapper.updateByPrimaryKey(entity);
@@ -57,7 +57,7 @@ public class TplMsgTextService{
             MsgBase base = new MsgBase();
             TplMsgText tplMsgText = new TplMsgText();
             base.setId(id);
-            tplMsgText.setBaseId(Long.valueOf(id));
+            tplMsgText.setBaseId(id);
 			tplMsgTextMapper.deleteByPrimaryKey(tplMsgText.getId());
 			msgBaseMapper.deleteByPrimaryKey(base.getId());
         }
