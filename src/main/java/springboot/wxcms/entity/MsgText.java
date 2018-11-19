@@ -35,6 +35,6 @@ import javax.persistence.Table;
 public class MsgText extends MsgBase{
 	private String title;//消息标题
 	private String content;//消息内容
-	private Long baseId;//消息主表id
+	private String baseId;//消息主表id
 
 }

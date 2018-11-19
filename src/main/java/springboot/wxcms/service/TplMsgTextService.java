@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import springboot.wxapi.process.MsgType;
 import springboot.wxcms.entity.MsgBase;
 import springboot.wxcms.entity.TplMsgText;
+import springboot.wxcms.mapper.MsgBaseMapper;
 import springboot.wxcms.mapper.TplMsgTextMapper;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class TplMsgTextService{
 	private MsgBaseMapper msgBaseMapper;
 
 	public TplMsgText getById(String id){
-		return tplMsgTextMapper.getById(id);
+		return tplMsgTextMapper.selectByPrimaryKey(id);
 	}
 
 	public List<TplMsgText> getTplMsgTextByPage(TplMsgText searchEntity){
@@ -34,16 +36,16 @@ public class TplMsgTextService{
 	public void add(TplMsgText entity){
 		MsgBase base = new MsgBase();
 		base.setInputcode(entity.getInputcode());
-		base.setCreateTime(new Date());
+		base.setCreateTime(LocalDateTime.now());
 		base.setMsgtype(MsgType.Text.toString());
-		msgBaseMapper.add(base);
+		msgBaseMapper.insert(base);
 		
 		entity.setBaseId(base.getId());
 		tplMsgTextMapper.insert(entity);
 	}
 
 	public void update(TplMsgText entity){
-		MsgBase base = msgBaseMapper.getById(entity.getBaseId().toString());
+		MsgBase base = msgBaseMapper.selectByPrimaryKey(entity.getBaseId().toString());
 		base.setInputcode(entity.getInputcode());
 		msgBaseMapper.updateInputcode(base);
 		tplMsgTextMapper.updateByPrimaryKey(entity);
@@ -56,8 +58,8 @@ public class TplMsgTextService{
             TplMsgText tplMsgText = new TplMsgText();
             base.setId(id);
             tplMsgText.setBaseId(Long.valueOf(id));
-			tplMsgTextMapper.deleteByPrimaryKey(tplMsgText);
-			msgBaseMapper.delete(base);
+			tplMsgTextMapper.deleteByPrimaryKey(tplMsgText.getId());
+			msgBaseMapper.deleteByPrimaryKey(base.getId());
         }
     }
 

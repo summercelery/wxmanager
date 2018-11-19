@@ -25,7 +25,7 @@
     values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{roleName,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="springboot.wxcms.Role">
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.Role">
     insert into role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

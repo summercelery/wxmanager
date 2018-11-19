@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="springboot.wxcms.mapper.MsgBaseMapper">
+  <resultMap id="BaseResultMap" type="springboot.wxcms.entity.MsgBase">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="enable" jdbcType="INTEGER" property="enable" />
+    <result column="favourcount" jdbcType="INTEGER" property="favourcount" />
+    <result column="inputcode" jdbcType="VARCHAR" property="inputcode" />
+    <result column="msgtype" jdbcType="VARCHAR" property="msgtype" />
+    <result column="readcount" jdbcType="INTEGER" property="readcount" />
+    <result column="rule" jdbcType="VARCHAR" property="rule" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_time, enable, favourcount, inputcode, msgtype, readcount, rule
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from msg_base
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from msg_base
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="springboot.wxcms.entity.MsgBase">
+    insert into msg_base (id, create_time, enable, 
+      favourcount, inputcode, msgtype, 
+      readcount, rule)
+    values (#{id,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{enable,jdbcType=INTEGER}, 
+      #{favourcount,jdbcType=INTEGER}, #{inputcode,jdbcType=VARCHAR}, #{msgtype,jdbcType=VARCHAR}, 
+      #{readcount,jdbcType=INTEGER}, #{rule,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="springboot.wxcms.entity.MsgBase">
+    insert into msg_base
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="enable != null">
+        enable,
+      </if>
+      <if test="favourcount != null">
+        favourcount,
+      </if>
+      <if test="inputcode != null">
+        inputcode,
+      </if>
+      <if test="msgtype != null">
+        msgtype,
+      </if>
+      <if test="readcount != null">
+        readcount,
+      </if>
+      <if test="rule != null">
+        rule,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enable != null">
+        #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="favourcount != null">
+        #{favourcount,jdbcType=INTEGER},
+      </if>
+      <if test="inputcode != null">
+        #{inputcode,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtype != null">
+        #{msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="readcount != null">
+        #{readcount,jdbcType=INTEGER},
+      </if>
+      <if test="rule != null">
+        #{rule,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="springboot.wxcms.entity.MsgBase">
+    update msg_base
+    <set>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="enable != null">
+        enable = #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="favourcount != null">
+        favourcount = #{favourcount,jdbcType=INTEGER},
+      </if>
+      <if test="inputcode != null">
+        inputcode = #{inputcode,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtype != null">
+        msgtype = #{msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="readcount != null">
+        readcount = #{readcount,jdbcType=INTEGER},
+      </if>
+      <if test="rule != null">
+        rule = #{rule,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="springboot.wxcms.entity.MsgBase">
+    update msg_base
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      enable = #{enable,jdbcType=INTEGER},
+      favourcount = #{favourcount,jdbcType=INTEGER},
+      inputcode = #{inputcode,jdbcType=VARCHAR},
+      msgtype = #{msgtype,jdbcType=VARCHAR},
+      readcount = #{readcount,jdbcType=INTEGER},
+      rule = #{rule,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

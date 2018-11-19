@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import springboot.wxcms.entity.MediaFiles;
 import springboot.wxcms.entity.MsgBase;
 import springboot.wxcms.mapper.MediaFilesMapper;
+import springboot.wxcms.mapper.MsgBaseMapper;
+
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -25,7 +27,7 @@ public class MediaFileService {
 		MsgBase base = new MsgBase();
 		base.setCreateTime(LocalDateTime.now());
 		base.setMsgtype(entity.getMediaType());
-		baseDao.add(base);
+		baseDao.insert(base);
 		//关联回复表
 		entity.setBaseId(base.getId());
 		//需要对base表添加数据
@@ -36,7 +38,7 @@ public class MediaFileService {
 		MediaFiles media = mediaFilesMapper.selectByPrimaryKey(mediaId);
 		MsgBase base = new MsgBase();
 		base.setId(media.getBaseId());
-		baseDao.delete(base);
+		baseDao.deleteByPrimaryKey(base.getId());
 		mediaFilesMapper.deleteByPrimaryKey(mediaId);
 	}
 

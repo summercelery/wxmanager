@@ -13,6 +13,7 @@ import springboot.wxcms.entity.MsgBase;
 import springboot.wxcms.entity.Page;
 import springboot.wxcms.mapper.ImgResourceMapper;
 import springboot.wxcms.mapper.MediaFilesMapper;
+import springboot.wxcms.mapper.MsgBaseMapper;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -47,7 +48,7 @@ public class ImgResourceService  {
 		MsgBase base = new MsgBase();
 		base.setCreateTime(LocalDateTime.now());
 		base.setMsgtype(MediaType.Image.name());
-		msgBaseMapper.add(base);
+		msgBaseMapper.insert(base);
 		//添加到素材表中
 		MediaFiles entity = new MediaFiles();
 		entity.setMediaId(img.getMediaId());

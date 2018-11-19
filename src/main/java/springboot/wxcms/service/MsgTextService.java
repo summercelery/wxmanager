@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import springboot.wxapi.process.MsgType;
 import springboot.wxcms.entity.MsgBase;
 import springboot.wxcms.entity.MsgText;
+import springboot.wxcms.mapper.MsgBaseMapper;
 import springboot.wxcms.mapper.MsgTextMapper;
 
 import javax.annotation.Resource;
@@ -36,16 +37,16 @@ public class MsgTextService {
         base.setInputcode(entity.getInputcode());
         base.setCreateTime(LocalDateTime.now());
         base.setMsgtype(MsgType.Text.toString());
-        MsgBaseMapper.add(base);
+        msgBaseMapper.insert(base);
         entity.setBaseId(base.getId());
-        msgTextMapper.add(entity);
+        msgTextMapper.insert(entity);
     }
 
     public void update(MsgText entity) {
-        MsgBase base = MsgBaseMapper.getById(entity.getBaseId().toString());
+        MsgBase base = msgBaseMapper.selectByPrimaryKey(entity.getBaseId().toString());
         base.setInputcode(entity.getInputcode());
         MsgBaseMapper.updateInputcode(base);
-        msgTextMapper.update(entity);
+        msgTextMapper.updateByPrimaryKey(entity);
     }
 
     public void delete(String baseIds) {
@@ -54,9 +55,9 @@ public class MsgTextService {
             MsgBase base = new MsgBase();
             MsgText msgText = new MsgText();
             base.setId(id);
-            msgText.setBaseId(Long.valueOf(id));
+            msgText.setBaseId(id);
             msgTextMapper.delete(msgText);
-            MsgBaseMapper.delete(base);
+            msgBaseMapper.deleteByPrimaryKey(base.getId());
         }
     }
 
