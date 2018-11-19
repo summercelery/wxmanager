@@ -4,6 +4,8 @@ package springboot.wxcms.service;
 import org.springframework.stereotype.Service;
 import springboot.wxcms.entity.MsgArticle;
 import springboot.wxcms.entity.MsgNews;
+import springboot.wxcms.mapper.MsgArticleMapper;
+import springboot.wxcms.mapper.MsgNewsMapper;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -18,41 +20,36 @@ import java.util.List;
 public class MsgArticleService {
 
 	@Resource
-	private MsgArticleDao articleDao;
+	private MsgArticleMapper msgArticleMapper;
 	
 	@Resource
-	private MsgNewsDao entityDao;
+	private MsgNewsMapper msgNewsMapper;
 	
-	@Override
 	public List<MsgArticle> getByNewsId(int id) {
 		// TODO Auto-generated method stub
-		return articleDao.getByNewsId(id);
+		return msgArticleMapper.getByNewsId(id);
 	}
 
-	@Override
-	public MsgArticle getById(int id) {
+	public MsgArticle getById(String id) {
 		// TODO Auto-generated method stub
-		return articleDao.getById(id);
+		return msgArticleMapper.selectByPrimaryKey(id);
 	}
 
-	@Override
 	public void add(MsgArticle article) {
 		// TODO Auto-generated method stub
-		articleDao.add(article);
+		msgArticleMapper.insert(article);
 	}
 
-	@Override
 	public void insertByBatch(List<MsgArticle> articles) {
 		// TODO Auto-generated method stub
-		articleDao.insertByBatch(articles);
+		msgArticleMapper.insertByBatch(articles);
 	}
 
-	@Override
 	public void update(MsgArticle article) {
 		// TODO Auto-generated method stub
 //		this.getById(article.getArId());
 		if(article.getNewsIndex()==0){
-			MsgNews news = entityDao.getById(String.valueOf(article.getNewsId()));
+			MsgNews news = msgNewsMapper.selectByPrimaryKey(String.valueOf(article.getNewsId()));
 			news.setTitle(article.getTitle());
 			news.setAuthor(article.getAuthor());
 			news.setBrief(article.getDigest());
@@ -61,21 +58,19 @@ public class MsgArticleService {
 			news.setThumbMediaId(article.getThumbMediaId());
 			news.setFromurl(article.getContentSourceUrl());
 			news.setShowpic(article.getShowCoverPic());
-			entityDao.update(news);
+			msgNewsMapper.updateByPrimaryKey(news);
 		}
-		articleDao.update(article);
+		msgArticleMapper.updateByPrimaryKey(article);
 	}
 
-	@Override
-	public void delete(int id) {
+	public void delete(String id) {
 		// TODO Auto-generated method stub
-		articleDao.delete(id);
+		msgArticleMapper.deleteByPrimaryKey(id);
 	}
 
-	@Override
 	public void deleteByBatch(int id) {
 		// TODO Auto-generated method stub
-		articleDao.deleteByBatch(id);
+		msgArticleMapper.deleteByBatch(id);
 	}
 
 }

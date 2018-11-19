@@ -21,7 +21,7 @@ import java.util.List;
 public class MsgNewsService{
 
 	@Resource
-	private MsgBaseDao baseDao;
+	private MsgBaseMapper msgBaseMapper;
 
 	@Resource
 	private MsgNewsDao msgNewsDao;
@@ -51,7 +51,7 @@ public class MsgNewsService{
 		base.setInputcode(entity.getInputcode());
 		base.setCreateTime(new Date());
 		base.setMsgtype(MsgType.News.toString());
-		baseDao.add(base);
+		msgBaseMapper.add(base);
 		
 		entity.setBaseId(base.getId());
 		msgNewsDao.add(entity);
@@ -66,9 +66,9 @@ public class MsgNewsService{
 	}
 
 	public void update(MsgNews entity){
-		MsgBase base = baseDao.getById(entity.getBaseId().toString());
+		MsgBase base = msgBaseMapper.getById(entity.getBaseId().toString());
 		base.setInputcode(entity.getInputcode());
-		baseDao.updateInputcode(base);
+		msgBaseMapper.updateInputcode(base);
 		
 		if(StringUtils.isEmpty(entity.getFromurl())){
 			entity.setUrl(entity.getUrl()+"?id="+entity.getId());
@@ -84,7 +84,7 @@ public class MsgNewsService{
 		base.setId(entity.getBaseId());
 		articleDao.deleteByBatch(entity.getId().intValue());
 		msgNewsDao.delete(entity);
-		baseDao.delete(entity);
+		msgBaseMapper.delete(entity);
 		
 	}
 
@@ -118,7 +118,7 @@ public class MsgNewsService{
 			MsgBase base = new MsgBase();
 			base.setCreateTime(new Date());
 			base.setMsgtype(MsgType.News.toString());
-			 baseDao.add(base);
+			msgBaseMapper.add(base);
 	    	//保存图文信息
 			news.setCreateTime(new Date());
 			news.setBaseId(base.getId());
@@ -211,7 +211,7 @@ public class MsgNewsService{
 			MsgBase base = new MsgBase();
 			base.setCreateTime(new Date());
 			base.setMsgtype(MsgType.News.toString());
-			baseDao.add(base);
+			msgBaseMapper.add(base);
 			news.setBaseId(base.getId());
 			news.setCreateTime(new Date());
 	    	//保存图文信息
@@ -247,7 +247,7 @@ public class MsgNewsService{
 			MsgBase base = new MsgBase();
 			base.setCreateTime(date);
 			base.setMsgtype(MsgType.News.toString());
-			baseDao.add(base);
+			msgBaseMapper.add(base);
 			for (int i = 0; i < news.size(); i++) {
 				MsgNews one = news.get(i);
 				one.setBaseId(base.getId());

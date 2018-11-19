@@ -36,17 +36,17 @@ public class TplMsgTextService{
 		base.setInputcode(entity.getInputcode());
 		base.setCreateTime(new Date());
 		base.setMsgtype(MsgType.Text.toString());
-		baseDao.add(base);
+		msgBaseMapper.add(base);
 		
 		entity.setBaseId(base.getId());
-		tplMsgTextMapper.add(entity);
+		tplMsgTextMapper.insert(entity);
 	}
 
 	public void update(TplMsgText entity){
-		MsgBase base = baseDao.getById(entity.getBaseId().toString());
+		MsgBase base = msgBaseMapper.getById(entity.getBaseId().toString());
 		base.setInputcode(entity.getInputcode());
-		baseDao.updateInputcode(base);
-		tplMsgTextMapper.update(entity);
+		msgBaseMapper.updateInputcode(base);
+		tplMsgTextMapper.updateByPrimaryKey(entity);
 	}
 
     public void delete(String baseIds) {
@@ -56,12 +56,11 @@ public class TplMsgTextService{
             TplMsgText tplMsgText = new TplMsgText();
             base.setId(id);
             tplMsgText.setBaseId(Long.valueOf(id));
-			tplMsgTextMapper.delete(tplMsgText);
-            baseDao.delete(base);
+			tplMsgTextMapper.deleteByPrimaryKey(tplMsgText);
+			msgBaseMapper.delete(base);
         }
     }
 
-	@Override
 	public TplMsgText getByBaseId(String baseid) {
 		return tplMsgTextMapper.getByBaseId(baseid);
 	}

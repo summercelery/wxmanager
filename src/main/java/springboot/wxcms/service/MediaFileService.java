@@ -29,7 +29,7 @@ public class MediaFileService {
 		//关联回复表
 		entity.setBaseId(base.getId());
 		//需要对base表添加数据
-		mediaFilesMapper.(entity);
+		mediaFilesMapper.insert(entity);
 	}
 
 	public void deleteByMediaId(String mediaId) {
