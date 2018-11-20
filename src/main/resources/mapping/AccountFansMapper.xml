@@ -45,6 +45,17 @@
   </select>
 
 
+  <insert id="addList" parameterType="list">
+    INSERT INTO account_fans ( OPEN_ID,SUBSCRIBE_STATUS,SUBSCRIBE_TIME,NICK_NAME,GENDER,LANGUAGE,COUNTRY,PROVINCE,CITY,HEAD_IMG_URL,REMARK,STATUS,ID,WX_ID,ACCOUNT,CREATE_TIME )
+    VALUES
+    <foreach  collection="list" item="item" index="index" separator="," >
+      <![CDATA[
+            ( #{item.openId},#{item.subscribeStatus},#{item.subscribeTime},#{item.nickname},#{item.gender},#{item.language},#{item.country},#{item.province},#{item.city},#{item.headimgurl},#{item.remark},#{item.status},#{item.id},#{item.wxid},#{item.account},#{item.createTime} )
+        	 ]]>
+    </foreach>
+  </insert>
+
+
 
 
 

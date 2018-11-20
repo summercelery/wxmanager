@@ -19,6 +19,8 @@
 package springboot.wxcms.entity;
 
 import lombok.Data;
+import springboot.wxapi.process.WxMemoryCacheClient;
+
 import javax.persistence.Transient;
 import java.io.Serializable;
 
@@ -43,5 +45,7 @@ public class Page implements Serializable {
     // private String sort;// 排序字段
     //
     // private String order;// 排序方式 ASC DESC
+    private String account = WxMemoryCacheClient.getAccount();
+
 
 }

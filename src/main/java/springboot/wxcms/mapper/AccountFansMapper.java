@@ -33,6 +33,9 @@ public interface AccountFansMapper {
     @Delete("delete from account_fans where open_id = #{openId}")
     void deleteByOpenId(String openId);
 
+    void addList(List<AccountFans> list);
+
+
     /**
      * 根据多个openId查看粉丝列表
      * @param openIds

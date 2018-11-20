@@ -21,13 +21,13 @@ public class MediaFileService {
 	@Resource
 	private MediaFilesMapper mediaFilesMapper;
 	@Resource
-	private MsgBaseMapper baseDao;
+	private MsgBaseMapper msgBaseMapper;
 
 	public void add(MediaFiles entity) {
 		MsgBase base = new MsgBase();
 		base.setCreateTime(LocalDateTime.now());
 		base.setMsgtype(entity.getMediaType());
-		baseDao.insert(base);
+		msgBaseMapper.insert(base);
 		//关联回复表
 		entity.setBaseId(base.getId());
 		//需要对base表添加数据
@@ -38,7 +38,7 @@ public class MediaFileService {
 		MediaFiles media = mediaFilesMapper.selectByPrimaryKey(mediaId);
 		MsgBase base = new MsgBase();
 		base.setId(media.getBaseId());
-		baseDao.deleteByPrimaryKey(base.getId());
+		msgBaseMapper.deleteByPrimaryKey(base.getId());
 		mediaFilesMapper.deleteByPrimaryKey(mediaId);
 	}
 

@@ -27,6 +27,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import springboot.core.exception.WxErrorException;
+import springboot.core.util.wx.WxUtil;
 import springboot.wxapi.process.*;
 import springboot.wxapi.service.MyService;
 import springboot.wxapi.vo.Matchrule;
@@ -75,6 +76,7 @@ public class MyServiceImpl implements MyService {
      * @param msgRequest : 接收到的消息
      * @param mpAccount ： appId
      */
+    @Override
     public String processMsg(MsgRequest msgRequest, MpAccount mpAccount)  throws WxErrorException {
         String msgtype = msgRequest.getMsgType();// 接收到的消息类型
         String respXml = null;// 返回的内容；
@@ -131,10 +133,10 @@ public class MyServiceImpl implements MyService {
                 AccountFans tmpFans = fansDao.getByOpenId(openId);
                 if (tmpFans == null) {
                     fans.setAccount(mpAccount.getAccount());
-                    fansDao.add(fans);
+                    fansDao.insert(fans);
                 } else {
                     fans.setId(tmpFans.getId());
-                    fansDao.update(fans);
+                    fansDao.updateByPrimaryKey(fans);
                 }
             }
             MsgText text = msgBaseDao.getMsgTextBySubscribe();
@@ -164,7 +166,7 @@ public class MyServiceImpl implements MyService {
                                 return MsgXmlUtil.newsToXml(WxMessageBuilder.getMsgResponseNews(msgRequest, msgNews));
                             }
                         } else {// 图文消息，或者文本消息
-                            MsgBase msg = msgBaseDao.getById(baseIds);
+                            MsgBase msg = msgBaseDao.selectByPrimaryKey(baseIds);
                             if (msg.getMsgtype().equals(MsgType.Text.toString())) {
                                 MsgText text = msgBaseDao.getMsgTextByBaseId(baseIds);
                                 if (text != null) {
@@ -186,6 +188,7 @@ public class MyServiceImpl implements MyService {
     }
 
     // 发布菜单
+    @Override
     public JSONObject publishMenu(MpAccount mpAccount) throws WxErrorException {
         // 获取数据库菜单
         List<AccountMenu> menus = menuDao.listWxMenus(new AccountMenu());
@@ -211,6 +214,7 @@ public class MyServiceImpl implements MyService {
     }
 
     // 删除菜单
+    @Override
     public JSONObject deleteMenu(MpAccount mpAccount)  throws WxErrorException {
         JSONObject rstObj = WxApiClient.deleteMenu(mpAccount);
         if (rstObj != null && rstObj.getIntValue("errcode") == 0) {// 成功，更新菜单组
@@ -220,6 +224,7 @@ public class MyServiceImpl implements MyService {
     }
 
     // 获取用户列表
+    @Override
     public boolean syncAccountFansList(MpAccount mpAccount) throws WxErrorException  {
         String nextOpenId = null;
         AccountFans lastFans = fansDao.getLastOpenId();
@@ -258,33 +263,36 @@ public class MyServiceImpl implements MyService {
     }
 
     // 获取用户信息接口 - 必须是开通了认证服务，否则微信平台没有开放此功能
+    @Override
     public AccountFans syncAccountFans(String openId, MpAccount mpAccount, boolean merge) throws WxErrorException {
         AccountFans fans = WxApiClient.syncAccountFans(openId, mpAccount);
         if (merge && null != fans) {
             AccountFans tmpFans = fansDao.getByOpenId(openId);
             if (tmpFans == null) {
-                fansDao.add(fans);
+                fansDao.insert(fans);
             } else {
                 fans.setId(tmpFans.getId());
-                fansDao.update(fans);
+                fansDao.updateByPrimaryKey(fans);
             }
         }
         return fans;
     }
 
     // 根据openid 获取粉丝，如果没有，同步粉丝
+    @Override
     public AccountFans getFansByOpenId(String openId, MpAccount mpAccount) throws WxErrorException {
         AccountFans fans = fansDao.getByOpenId(openId);
         if (fans == null) {// 如果没有，添加
             fans = WxApiClient.syncAccountFans(openId, mpAccount);
             if (null != fans) {
-                fansDao.add(fans);
+                fansDao.insert(fans);
             }
         }
         return fans;
     }
 
     //同步粉丝列表
+    @Override
     public boolean syncUserTagList(MpAccount mpAccount) throws WxErrorException {
         String url=null;
         try {

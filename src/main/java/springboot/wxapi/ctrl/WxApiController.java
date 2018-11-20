@@ -10,14 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 import springboot.core.exception.WxErrorException;
 import springboot.core.util.DateUtil;
 import springboot.core.util.UploadUtil;
+import springboot.core.util.wx.HTTPResultXml;
 import springboot.core.util.wx.SignUtil;
+import springboot.core.util.wx.TenpayUtil2;
 import springboot.wxapi.process.*;
 import springboot.wxapi.service.MyService;
 import springboot.wxapi.vo.*;
-import springboot.wxcms.entity.AccountFans;
-import springboot.wxcms.entity.MsgNews;
-import springboot.wxcms.entity.MsgText;
-import springboot.wxcms.entity.Result;
+import springboot.wxcms.entity.*;
 import springboot.wxcms.service.MsgNewsService;
 import springboot.wxcms.service.MsgTextService;
 
@@ -34,7 +33,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/wxapi")
 @Slf4j
-public class WxApiCtrl{
+public class WxApiController {
 	
 
 	@Resource
@@ -105,12 +104,12 @@ public class WxApiCtrl{
 			rstObj = myService.publishMenu(mpAccount);
 			if(rstObj != null){//成功，更新菜单组
 				if(rstObj.containsKey("menu_id")){
-					ModelAndView mv = new ModelAndView("common/success");
-					mv.addObject("successMsg", "创建菜单成功");
+					ModelAndView mv = new ModelAndView("common/ok");
+					mv.addObject("okMsg", "创建菜单成功");
 					return mv;
 				}else if(rstObj.containsKey("errcode") && rstObj.getIntValue("errcode") == 0){
-					ModelAndView mv = new ModelAndView("common/success");
-					mv.addObject("successMsg", "创建菜单成功");
+					ModelAndView mv = new ModelAndView("common/ok");
+					mv.addObject("okMsg", "创建菜单成功");
 					return mv;
 				}
 			}
@@ -133,8 +132,8 @@ public class WxApiCtrl{
 		if(mpAccount != null){
 			rstObj = myService.deleteMenu(mpAccount);
 			if(rstObj != null && rstObj.getIntValue("errcode") == 0){
-				ModelAndView mv = new ModelAndView("common/success");
-				mv.addObject("successMsg", "删除菜单成功");
+				ModelAndView mv = new ModelAndView("common/ok");
+				mv.addObject("okMsg", "删除菜单成功");
 				return mv;
 			}
 		}
@@ -172,10 +171,10 @@ public class WxApiCtrl{
 		if(mpAccount != null){
 			boolean flag = myService.syncUserTagList(mpAccount);
 			if(flag){
-				return Result.success();
+				return Result.ok();
 			}
 		}
-		return Result.failure();
+		return Result.fail("操作失败");
 	}
 
 	//根据用户的ID更新用户信息
@@ -186,10 +185,10 @@ public class WxApiCtrl{
 		if (mpAccount != null) {
 			AccountFans fans = myService.syncAccountFans(openId, mpAccount, true);//同时更新数据库
 			if (fans != null) {
-				return Result.success(fans);
+				return Result.ok(fans);
 			}
 		}
-		return Result.failure();
+		return Result.fail("操作失败");
 	}
 	
 	//获取永久素材
@@ -214,7 +213,15 @@ public class WxApiCtrl{
 				}
 			}
 		}
-		return getResult(materialArticle,materialList);
+
+		Result result = Result.ok(materialList);
+		Page newPage = new Page();
+		newPage.setPageNum(materialArticle.getPageNum());
+		newPage.setPageSize(materialArticle.getPageSize());
+		newPage.setTotal(materialArticle.getTotal());
+		newPage.setPages(materialArticle.getPages());
+		result.setPage(newPage);
+		return result;
 	}
 	
 	
@@ -227,8 +234,8 @@ public class WxApiCtrl{
 		msgNewsList.add(msgNews);
 		JSONObject rstObj = WxApiClient.uploadNews(msgNewsList, mpAccount);
 		if(rstObj.containsKey("media_id")){
-			ModelAndView mv = new ModelAndView("common/success");
-			mv.addObject("successMsg", "上传图文素材成功,素材 media_id : " + rstObj.getString("media_id"));
+			ModelAndView mv = new ModelAndView("common/ok");
+			mv.addObject("okMsg", "上传图文素材成功,素材 media_id : " + rstObj.getString("media_id"));
 			return mv;
 		}else{
 			rstMsg = ErrCode.errMsg(rstObj.getIntValue("errcode"));
@@ -297,7 +304,7 @@ public class WxApiCtrl{
 				if(result.getIntValue("errcode") != 0){
 					response.getWriter().write("send failure");
 				}else{
-					response.getWriter().write("send success");
+					response.getWriter().write("send ok");
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -321,7 +328,7 @@ public class WxApiCtrl{
 			if(result.getIntValue("errcode") != 0){
 				response.getWriter().write("send failure");
 			}else{
-				response.getWriter().write("send success");
+				response.getWriter().write("send ok");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -356,7 +363,7 @@ public class WxApiCtrl{
 			JSONObject result = WxApiClient.sendTemplateMessage(tplMsg, mpAccount);
 		}
 
-		return Result.success();
+		return Result.ok();
 	}
 	
 	/**
@@ -365,7 +372,7 @@ public class WxApiCtrl{
 	 * @return
 	 */
 	@RequestMapping(value = "/wxipay_noity")
-	public @ResponseBody com.wxmp.core.util.wx.HTTPResultXml wxipay_noity(@RequestBody String requestBodyXml) {
+	public @ResponseBody HTTPResultXml wxipay_noity(@RequestBody String requestBodyXml) {
 		log.info("-------------------------------------wxipay_noity-----<0>-------------------requestBodyXml:"+requestBodyXml);		
 		
 		String jsonStr = requestBodyXml;
@@ -373,17 +380,17 @@ public class WxApiCtrl{
 	
 		Map map = new HashMap();
 		try {
-			map = com.wxmp.core.util.wx.TenpayUtil2.doXMLParseByDom4j(jsonStr);
+			map = TenpayUtil2.doXMLParseByDom4j(jsonStr);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		String return_code = (String) map.get("return_code");
 		String return_msg = (String) map.get("return_msg");
-		if("SUCCESS".equals(return_code)){
+		if("ok".equals(return_code)){
 			String transaction_id = (String) map.get("transaction_id");
 			String out_trade_no = (String) map.get("out_trade_no");
 			
-		    return_code="<![CDATA[SUCCESS]]>";
+		    return_code="<![CDATA[ok]]>";
 		    return_msg="<![CDATA[OK]]>";		
 		}else{
 			 return_msg= (String) map.get("err_code_des");
@@ -392,7 +399,7 @@ public class WxApiCtrl{
 		}		  
 	
 		
-		com.wxmp.core.util.wx.HTTPResultXml httpResultXml=new com.wxmp.core.util.wx.HTTPResultXml();
+		HTTPResultXml httpResultXml=new HTTPResultXml();
 		httpResultXml.setReturn_code(return_code);
 		httpResultXml.setReturn_msg(return_msg);
 		
@@ -427,9 +434,9 @@ public class WxApiCtrl{
 		JSONObject result = WxApiClient.sendCustomTextMessage(openid, content, mpAccount);
 
 		if (result.getIntValue("errcode") != 0) {
-			return Result.failure(result.toString());
+			return Result.fail(result.toString());
 		} else {
-			return Result.success();
+			return Result.ok();
 		}
 	}
 
@@ -450,9 +457,9 @@ public class WxApiCtrl{
 		JSONObject result = WxApiClient.sendCustomNews(openid, msgNews, mpAccount);
 		log.info(" 客服接口-发送图文消息：" + result.toString());
 		if (result.getIntValue("errcode") != 0) {
-			return Result.failure(result.toString());
+			return Result.fail(result.toString());
 		} else {
-			return Result.success();
+			return Result.ok();
 		}
 	}
 	
@@ -595,21 +602,21 @@ public class WxApiCtrl{
 		if(mpAccount != null){
 			rstObj = myService.publishMenu(mpAccount);
 			if(rstObj != null){//成功，更新菜单组
-				return Result.success();
+				return Result.ok();
 //				if(rstObj.containsKey("menu_id")){
-//					ModelAndView mv = new ModelAndView("common/success");
-//					mv.addObject("successMsg", "创建菜单成功");
+//					ModelAndView mv = new ModelAndView("common/ok");
+//					mv.addObject("okMsg", "创建菜单成功");
 //					code = "1";
 //					return code;
 //				}else if(rstObj.containsKey("errcode") && rstObj.getIntValue("errcode") == 0){
-//					ModelAndView mv = new ModelAndView("common/success");
-//					mv.addObject("successMsg", "创建菜单成功");
+//					ModelAndView mv = new ModelAndView("common/ok");
+//					mv.addObject("okMsg", "创建菜单成功");
 //					code = "1";
 //					return code;
 //				}
 			}
 		}
-		return Result.failure();
+		return Result.fail("操作失败");
 	}
 	
 	
@@ -648,6 +655,6 @@ public class WxApiCtrl{
 		MpAccount mpAccount = WxMemoryCacheClient.getMpAccount();//获取缓存中的唯一账号
 		String accessToken = WxApiClient.getAccessToken(mpAccount);
 		JSONObject result = WxApi.forDataCube(accessToken, type, start, end);
-		return Result.success(result);
+		return Result.ok(result);
 	}
 }

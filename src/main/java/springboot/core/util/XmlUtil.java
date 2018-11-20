@@ -18,7 +18,6 @@
  */
 package springboot.core.util;
 
-import com.wxmp.core.common.XMLDocException;
 import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;

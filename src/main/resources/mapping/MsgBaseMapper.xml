@@ -23,6 +23,15 @@
     ORDER BY ID
   </select>
 
+  <select id="listMsgNewsByBaseId" resultMap="BaseResultMap">
+    SELECT t.* FROM msg_news t ,msg_base b
+    WHERE t.base_id = b.id
+    AND b.id in
+    <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
 
 
   <sql id="Base_Column_List">
