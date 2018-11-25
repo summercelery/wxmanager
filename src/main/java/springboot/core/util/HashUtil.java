@@ -34,8 +34,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.lang3.Validate;
+import springboot.core.common.Configuration;
 
-import com.wxmp.core.common.Configuration;
 
 /**
  * 功能：数据加密解密工具类

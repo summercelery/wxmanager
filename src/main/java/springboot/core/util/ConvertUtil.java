@@ -21,6 +21,7 @@ package springboot.core.util;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
+import springboot.core.common.Configuration;
 
 import java.io.*;
 
@@ -153,7 +154,7 @@ public class ConvertUtil {
 		String line =  null ;    
 		try{
 			while  ((line = reader.readLine()) !=  null ) {    
-				sb.append(line +  Configuration.LINE_SEPARATOR );    
+				sb.append(line +  Configuration.LINE_SEPARATOR );
 			}    
 		}  catch  (IOException e) {    
 			e.printStackTrace();    

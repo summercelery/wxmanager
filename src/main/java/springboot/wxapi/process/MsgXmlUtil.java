@@ -1,6 +1,11 @@
 
 package springboot.wxapi.process;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.core.util.QuickWriter;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -109,14 +114,17 @@ public class MsgXmlUtil {
 	 * 扩展xstream，让xml节点增加CDATA标记
 	 */
 	public static XStream xstream = new XStream(new XppDriver() {
+		@Override
 		public HierarchicalStreamWriter createWriter(Writer out) {
 			return new PrettyPrintWriter(out) {
 				boolean CDATA = true;
 				
+				@Override
 				@SuppressWarnings("rawtypes")
 				public void startNode(String name, Class clazz) {
 					super.startNode(name, clazz);
 				}
+				@Override
 				protected void writeText(QuickWriter writer, String text) {
 					if (CDATA) {
 						writer.write("<![CDATA[");
