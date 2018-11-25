@@ -71,7 +71,7 @@ public class UserTagController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getById")
-	public Result getById(Integer id){
+	public Result getById(String id){
 		UserTag userTag = userTagService.getById(id);
 		return Result.ok(userTag);
 	}
