@@ -29,6 +29,20 @@ public class SysUserController {
     @Autowired
     private AccountService accountService;
 
+
+    @PostMapping(value = "/register")
+    public Result register(SysUser user) {
+        SysUser user1 = new SysUser();
+        user1.setLoginName(user.getLoginName());
+        String a = Md5Util.getMd5(user.getPassword(),user1.getId());
+        user1.setPassword(a);
+        sysUserService.createUser(user1);
+
+        return Result.ok();
+    }
+
+
+
     @PostMapping(value = "/login")
     public Result login(SysUser user, Boolean rememberMe) {
 

@@ -1,4 +1,7 @@
 server:
+  tomcat:
+    max-threads: 10
+    min-spare-threads: 10
   port: 8080
 
 spring:
@@ -22,6 +25,12 @@ spring:
     hibernate:
 #     自动创建、更新、验证数据库结构
       ddl-auto: update
+  resources:
+    static-locations: classpath:/static/,classpath:/views/
+
+
+
+
 #PageHelp分页插件
 pagehelper:
   helperDialect: mysql

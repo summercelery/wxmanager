@@ -29,12 +29,7 @@ public class LoginNameRealm extends AuthorizingRealm {
 
         UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
         String loginName = token.getUsername();
-
-        //邮箱或手机号登陆
-        SysUser user = sysUserService.findUserByEmail(loginName);
-        if(null == user){
-            user = sysUserService.findUserByPhone(loginName);
-        }
+        SysUser user = sysUserService.getSysUserByLoginName(loginName);
         if(null == user){
             throw new UnknownAccountException();
         }

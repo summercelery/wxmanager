@@ -8,9 +8,10 @@ layui.use(['form', 'layer'], function () {
     });
     //监听提交
     $('#fshLogin').click(function () {
-        var username = $.trim($("#username").val());
+        var loginName = $.trim($("#loginName").val());
         var password = $.trim($("#password").val());
-        if(username==""){
+        var remember = $('#remember').is(':checked');
+        if(loginName==""){
             layer.msg('请输入账号');
             return;
         }
@@ -18,21 +19,23 @@ layui.use(['form', 'layer'], function () {
             layer.msg('请输入密码');
             return;
         }
+
         ajax({
             url: '/user/login',
             type: 'POST',
             dataType: 'json',
             data: {
-                account: username,
-                pwd: password
+                loginName: loginName,
+                password: password,
+                rememberMe:remember
             },
             success: function (result) {
                 if (result.success) {
                     if ($('#remember').is(':checked')) {
-                        localStorage.setItem('username', username);
+                        localStorage.setItem('loginName', loginName);
                         localStorage.setItem('password', password);
                     } else {
-                        localStorage.clear('username');
+                        localStorage.clear('loginName');
                         localStorage.clear('password');
                     }
                     localStorage.setItem('nickname', result.data?result.data:"管理员");
@@ -49,9 +52,9 @@ layui.use(['form', 'layer'], function () {
 });
 
 //判断是否存在过用户
-if (localStorage.getItem('username')) {
+if (localStorage.getItem('loginName')) {
     $("#remember").attr("checked", true);
-    $("#username").val(localStorage.getItem('username'));
+    $("#loginName").val(localStorage.getItem('loginName'));
     $("#password").val(localStorage.getItem('password'))
 }
 //百度统计

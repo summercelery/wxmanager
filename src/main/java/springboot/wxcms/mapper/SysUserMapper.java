@@ -4,17 +4,17 @@ import org.apache.ibatis.annotations.*;
 import springboot.wxcms.entity.SysUser;
 
 public interface SysUserMapper{
-
-    @ResultMap("BaseResultMap")
-    @Select("select * from user where email = #{email}")
-    SysUser findUserByEmail(String email);
-
-    @ResultMap("BaseResultMap")
-    @Select("select * from user where phone = #{phone}")
-    SysUser findUserByPhone(String phone);
-
-    @Select("select count(1) from user where phone = #{phone}")
-    Integer countUserNumByPhone(String phone);
+//
+//    @ResultMap("BaseResultMap")
+//    @Select("select * from user where email = #{email}")
+//    SysUser findUserByEmail(String email);
+//
+//    @ResultMap("BaseResultMap")
+//    @Select("select * from user where phone = #{phone}")
+//    SysUser findUserByPhone(String phone);
+//
+//    @Select("select count(1) from user where phone = #{phone}")
+//    Integer countUserNumByPhone(String phone);
 
 
     @ResultMap("BaseResultMap")

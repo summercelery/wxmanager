@@ -189,6 +189,7 @@ function showDialog(params) {
         $.ajax({
             url: getTemplatePath(params.template),
             dataType: 'html',
+            type:'get',
             async: false,//异步加载
             success: function (html) {
                 //打开窗口

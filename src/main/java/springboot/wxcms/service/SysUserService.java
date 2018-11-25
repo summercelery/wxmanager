@@ -30,16 +30,16 @@ public class SysUserService {
         return sysUserMapper.insertSelective(sysUser);
     }
 
-    public SysUser findUserByEmail(String email) {
-        return sysUserMapper.findUserByEmail(email);
-    }
-
-    public SysUser findUserByPhone(String phone) {
-        return sysUserMapper.findUserByPhone(phone);
-    }
-
-    public int countUserNumByPhone(String phone) {
-        return sysUserMapper.countUserNumByPhone(phone);
-    }
+//    public SysUser findUserByEmail(String email) {
+//        return sysUserMapper.findUserByEmail(email);
+//    }
+//
+//    public SysUser findUserByPhone(String phone) {
+//        return sysUserMapper.findUserByPhone(phone);
+//    }
+//
+//    public int countUserNumByPhone(String phone) {
+//        return sysUserMapper.countUserNumByPhone(phone);
+//    }
 
 }
