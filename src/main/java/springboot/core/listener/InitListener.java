@@ -36,6 +36,7 @@ public class InitListener implements ServletContextListener {
     public InitListener() {
     }
     
+    @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
             //放入公众号
@@ -54,6 +55,7 @@ public class InitListener implements ServletContextListener {
         
     }
     
+    @Override
     public void contextDestroyed(ServletContextEvent sce) {
         
     }
