@@ -20,9 +20,10 @@ package springboot.wxcms.entity;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
 import java.io.Serializable;
 
-
+@Entity
 @Data
 public class AccountMenuGroup extends BaseEntity implements Serializable {
     private String name;
