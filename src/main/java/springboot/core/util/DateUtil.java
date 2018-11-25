@@ -382,14 +382,11 @@ public class DateUtil {
         return today;
     }
 
-    public static Date timestampToDate(String str_num) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static LocalDateTime timestampToDate(String str_num) {
         if (str_num.length() == 13) {
-            String date = format.format(new Date(Long.parseLong(str_num)));
-            return changeStrToDate(date);
+            return LocalDateTime.ofEpochSecond(Long.parseLong(str_num),0,ZoneOffset.ofHours(8));
         } else {
-            String date = format.format(new Date(Integer.parseInt(str_num) * 1000L));
-            return changeStrToDate(date);
+            return LocalDateTime.ofEpochSecond(Integer.parseInt(str_num) * 1000L,0,ZoneOffset.ofHours(8));
         }
     }
 

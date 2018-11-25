@@ -1,6 +1,7 @@
 package springboot.wxcms.mapper;
 
 
+import org.apache.ibatis.annotations.Select;
 import springboot.wxcms.entity.UserTag;
 
 import java.util.List;
@@ -8,6 +9,14 @@ import java.util.List;
 public interface UserTagMapper {
 
     List<UserTag> getUserTagListByPage(UserTag searchEntity);
+
+
+
+    @Select("select MAX(ID) from user_tag")
+    Integer getMaxId();
+
+    void addList(List<UserTag> list);
+
 
     /**
      * <p>
@@ -29,4 +38,5 @@ public interface UserTagMapper {
     int updateByPrimaryKeySelective(UserTag record);
 
     int updateByPrimaryKey(UserTag record);
+
 }

@@ -1,5 +1,5 @@
 /*
- * FileName：HTTPSPKCSCoder.java 
+ * FileName：HTTPSCoder.java 
  * <p>
  * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
  * <p>
@@ -30,8 +30,7 @@ import java.security.SecureRandom;
  * @version 1.0
  * @since 1.0
  */
-public abstract class HTTPSPKCSCoder {
-
+public abstract class HTTPSCoder {
 	/**
 	 * 协议
 	 */
@@ -47,8 +46,7 @@ public abstract class HTTPSPKCSCoder {
 	 */
 	private static KeyStore getKeyStore(String keyStorePath, String password) throws Exception {
 		// 实例化密钥库
-		KeyStore ks = KeyStore.getInstance("PKCS12");
-		// KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+		KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
 		// 获得密钥库文件流
 		FileInputStream is = new FileInputStream(keyStorePath);
 		// 加载密钥库

@@ -18,7 +18,9 @@
  */
 package springboot.core.util;
 
-import com.wxmp.core.util.security.BASE64Encoder;
+
+import springboot.core.util.security.BASE64Encoder;
+import springboot.core.util.security.coder.*;
 
 import java.util.Map;
 

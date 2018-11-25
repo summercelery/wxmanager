@@ -1,25 +1,9 @@
-/*
- * FileName：RequestHandler.java 
- * <p>
- * Copyright (c) 2017-2020, <a href="http://www.webcsn.com">hermit (794890569@qq.com)</a>.
- * <p>
- * Licensed under the GNU General Public License, Version 3 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.gnu.org/licenses/gpl-3.0.html
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * 
- */
+
 package springboot.core.util.wx;
 
 
-import com.wxmp.core.util.MD5Util;
+
+import springboot.core.util.Md5Util;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -186,7 +170,7 @@ public class RequestHandler {
 		System.out.println("第一步：对参数按照key=value的格式，并按照参数名ASCII字典序排序如下:\n" + sb);
 		sb.append("key=" + this.getKey());
 		System.out.println("第二步：拼接API密钥：:\n" + sb);
-		String sign = MD5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
+		String sign = Md5Util.MD5Encode(sb.toString(), "UTF-8").toUpperCase();
 		System.out.println("packge md5签名---<1>---:\n" + sign);
 		
 		return sign;
@@ -214,7 +198,7 @@ public class RequestHandler {
 		// 算出摘要
 		String enc = TenpayUtil2.getCharacterEncoding(this.request,
 				this.response);
-		String sign = MD5Util.MD5Encode(sb.toString(), enc).toLowerCase();
+		String sign = Md5Util.MD5Encode(sb.toString(), enc).toLowerCase();
 
 		String tenpaySign = this.getParameter("sign").toLowerCase();
 

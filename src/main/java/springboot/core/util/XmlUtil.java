@@ -22,6 +22,7 @@ import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import springboot.core.common.XMLDocException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

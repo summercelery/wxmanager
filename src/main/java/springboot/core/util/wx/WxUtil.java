@@ -6,12 +6,15 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.util.StringUtils;
 import springboot.core.constant.Constants;
+import springboot.core.spring.SpringContextHolder;
 import springboot.wxapi.process.MsgType;
 import springboot.wxapi.vo.Matchrule;
 import springboot.wxcms.entity.Account;
 import springboot.wxcms.entity.AccountMenu;
 import springboot.wxcms.entity.MsgNews;
 import springboot.wxcms.entity.MsgText;
+import springboot.wxcms.mapper.MsgNewsMapper;
+import springboot.wxcms.mapper.MsgTextMapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,9 +23,9 @@ import java.util.Map;
 
 public class WxUtil {
 
-	private static MsgTextDao msgTextDao = SpringContextHolder.getBean(MsgTextDao.class);
+	private static MsgTextMapper msgTextDao = SpringContextHolder.getBean(MsgTextMapper.class);
 
-	private static MsgNewsDao msgNewsDao=SpringContextHolder.getBean(MsgNewsDao.class);
+	private static MsgNewsMapper msgNewsDao=SpringContextHolder.getBean(MsgNewsMapper.class);
 	/**
 	 * 获取微信公众账号的菜单
 	 * @param menus	菜单列表

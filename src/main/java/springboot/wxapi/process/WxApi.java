@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import springboot.core.exception.WxError;
 import springboot.core.exception.WxErrorException;
+import springboot.core.util.DateUtil;
+import springboot.core.util.HttpClientUtils;
 import springboot.core.util.MyTrustManager;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -753,7 +755,7 @@ public class WxApi {
     	String url=String.format(cube[1], accessToken);
     	int days=0;
     	try {
-    		days=DateUtil.dayDiff(start, end);
+    		days= DateUtil.dayDiff(start, end);
 		} catch (ParseException e) {
 			throw new WxErrorException(WxError.newBuilder().setErrorCode(-4).setErrorMsg("时间转化出错").build());
 		}

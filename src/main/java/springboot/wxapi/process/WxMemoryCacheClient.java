@@ -21,17 +21,16 @@ public class WxMemoryCacheClient {
 
 	public static final String SESSION_ACCOUNT= "session_account";
 
-	public static void addMpAccount(List<Account> accounts){
-		Map<String,MpAccount> mpAccountMap =(Map<String,MpAccount>)CacheUtils.get("mpAccountMap");
+	public static void addMpAccount(MpAccount account){
+		Map<String,MpAccount> mpAccountMap = (Map<String, MpAccount>) CacheUtils.get("mpAccountMap");
 		if(mpAccountMap==null){
 			mpAccountMap= new HashMap<>();
 		}
-		if (CollectionUtils.isNotEmpty(accounts)) {
-			for (MpAccount account:accounts) {
-				mpAccountMap.put(account.getAccount(), account);
-			}
+		if(account != null){
+			mpAccountMap.put(account.getAccount(), account);
+			CacheUtils.put("mpAccountMap", mpAccountMap);
+			setAccount(account.getAccount());
 		}
-		CacheUtils.put("mpAccountMap", mpAccountMap);
 	}
 //
 	public static MpAccount getMpAccount(){

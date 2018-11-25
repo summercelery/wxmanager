@@ -7,12 +7,7 @@ import java.util.List;
 
 public interface ImgResourceMapper {
 
-
-
-
     List<ImgResource> getImgListByPage(ImgResource entity);
-
-
 
     int deleteByPrimaryKey(String id);
 

@@ -26,6 +26,17 @@
     </foreach>
   </delete>
 
+  <!-- 批量添加微信服务器的用户标签到本地库 -->
+  <insert id="addList" parameterType="list">
+    INSERT INTO user_tag ( ID,NAME,COUNT )
+    VALUES
+    <foreach  collection="list" item="item" index="index" separator="," >
+      <![CDATA[
+             ( #{item.id},#{item.name},#{item.count} )
+        	 ]]>
+    </foreach>
+  </insert>
+
 
 
 

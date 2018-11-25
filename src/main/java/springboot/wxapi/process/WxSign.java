@@ -1,6 +1,7 @@
 
 package springboot.wxapi.process;
 
+import springboot.core.common.Identities;
 import springboot.core.util.wx.SignUtil;
 
 import java.util.SortedMap;

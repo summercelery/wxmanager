@@ -18,9 +18,9 @@
  */
 package springboot.core.util;
 
-import com.wxmp.core.common.Configuration;
 import org.apache.commons.lang3.Validate;
 import org.springframework.util.Assert;
+import springboot.core.common.Configuration;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletRequest;
@@ -81,7 +81,7 @@ public class WebUtil {
 	 */
 	public static String urlRequest(HttpServletRequest request,String[] execludeParams,String charset){
 		String requestUrl = request.getServletPath();
-		String query = WebUtil.parseQueryString(request,execludeParams,Configuration.getEncoding());
+		String query = WebUtil.parseQueryString(request,execludeParams, Configuration.getEncoding());
 		String url = null;
 		if(ValidateUtil.isNotNull(query))
 			url = new StringBuilder().append(requestUrl).append("?").append(query).toString();

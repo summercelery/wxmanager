@@ -318,13 +318,13 @@ public class MyServiceImpl implements MyService {
         });
         UserTag userTag = userTagList.get(0);
         Integer maxIdInDb = userTagDao.getMaxId() == null ?  0 : userTagDao.getMaxId();//第一次同步，数据库没有数据返回null
-        if (null == userTag.getId() || userTag.getId().intValue() == maxIdInDb.intValue()) {
+        if (null == userTag.getId() || Integer.parseInt(userTag.getId()) == maxIdInDb) {
             //说明已经同步
             return true;
-        }else if( userTag.getId() > maxIdInDb ){
+        }else if( Integer.parseInt(userTag.getId()) > maxIdInDb ){
             //如果微信服务器新增用户标签，同步新增标签，新增标签的ID比本地库的ID大
             for (UserTag tag: userTagList) {
-                if(tag.getId()<=maxIdInDb){
+                if(Integer.parseInt(tag.getId())<=maxIdInDb){
                     userTagList.remove(tag);
                 }
             }
