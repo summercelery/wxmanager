@@ -14,21 +14,21 @@ import static springboot.core.constant.RedisConstant.*;
 @Component
 public class ScheduleTask {
 
-    @Autowired
-    private JedisService jedisService;
-
-    @Autowired
-    private AmqpTemplate amqpTemplate;
-
-    @Scheduled(fixedDelay = 1000)
-    public void clockSendPhone() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        for(String key : jedisService.getAllkeys(REDIS_CLOCK_PHONE_DB)){
-            if(System.currentTimeMillis() > Long.valueOf(jedisService.getHashField(key,"clockTime",REDIS_CLOCK_PHONE_DB))){
-                String data = objectMapper.writeValueAsString(jedisService.getAllHash(key,REDIS_CLOCK_PHONE_DB));
-                amqpTemplate.convertAndSend(PHONE_CODE_QUEUE_NAME,data);
-                jedisService.deleteKey(key,REDIS_CLOCK_PHONE_DB);
-            }
-        }
-    }
+//    @Autowired
+//    private JedisService jedisService;
+//
+//    @Autowired
+//    private AmqpTemplate amqpTemplate;
+//
+//    @Scheduled(fixedDelay = 1000)
+//    public void clockSendPhone() throws JsonProcessingException {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        for(String key : jedisService.getAllkeys(REDIS_CLOCK_PHONE_DB)){
+//            if(System.currentTimeMillis() > Long.valueOf(jedisService.getHashField(key,"clockTime",REDIS_CLOCK_PHONE_DB))){
+//                String data = objectMapper.writeValueAsString(jedisService.getAllHash(key,REDIS_CLOCK_PHONE_DB));
+//                amqpTemplate.convertAndSend(PHONE_CODE_QUEUE_NAME,data);
+//                jedisService.deleteKey(key,REDIS_CLOCK_PHONE_DB);
+//            }
+//        }
+//    }
 }

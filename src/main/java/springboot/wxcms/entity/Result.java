@@ -5,6 +5,8 @@ import lombok.Data;
 import springboot.core.constant.Constants;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * 返回数据
  *
@@ -66,8 +68,7 @@ public class Result<T> {
     }
 
     public String getTimetemp() {
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss.SSS");
-        return sdf.format(this.dateTime);
+        return this.dateTime.format( DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss.SSS"));
     }
 
 }
