@@ -10,7 +10,7 @@
   </resultMap>
 
   <select id="getMsgTextByPage" parameterType="springboot.wxcms.entity.MsgText" resultMap="BaseResultMap">
-    SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_msg_text t , wxcms_msg_base b
+    SELECT b.msg_type ,b.input_code ,t.* FROM msg_text t , msg_base b
     WHERE t.base_id = b.id
     <if test="inputcode != '' and inputcode != null">
       and b.input_code=#{inputcode}
@@ -22,7 +22,7 @@
   </select>
 
   <select id="getMsgTextList" parameterType="springboot.wxcms.entity.MsgText" resultMap="BaseResultMap">
-    SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_msg_text t , wxcms_msg_base b
+    SELECT b.msg_type ,b.input_code ,t.* FROM msg_text t , msg_base b
     WHERE t.base_id = b.id
     <if test="inputcode != '' and inputcode != null">
       and b.input_code=#{inputcode}

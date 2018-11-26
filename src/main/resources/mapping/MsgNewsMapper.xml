@@ -27,7 +27,7 @@
 
 
   <select id="getWebNewsListByPage" parameterType="springboot.wxcms.entity.MsgNews" resultMap="BaseResultMap">
-    SELECT  t.* FROM wxcms_msg_news t
+    SELECT  t.* FROM msg_news t
     <where>
 
       <if test="multType!=null and multType!='' ">

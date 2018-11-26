@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
+import springboot.wxapi.process.WxMemoryCacheClient;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -49,5 +50,7 @@ public class AccountMenu {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
-	
+	private String account = WxMemoryCacheClient.getAccount();
+
+
 }

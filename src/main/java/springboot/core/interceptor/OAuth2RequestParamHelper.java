@@ -1,4 +1,4 @@
-package springboot.wxapi.interceptor;
+package springboot.core.interceptor;
 
 
 import org.apache.commons.lang3.StringUtils;

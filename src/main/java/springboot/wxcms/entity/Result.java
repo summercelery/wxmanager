@@ -1,9 +1,9 @@
 package springboot.wxcms.entity;
 
 import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import lombok.Data;
 import springboot.core.constant.Constants;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 public class Result<T> {
 
     //服务器返回数据
-    private T date;
+    private T data;
 
     //是否成功
     private Boolean success;
@@ -40,13 +40,15 @@ public class Result<T> {
     public Result(T t) {
         if(t instanceof Page){
             Page newPage = (Page) t;
-            page.setPageNum(newPage.getPageNum());
-            page.setPageSize(newPage.getPageSize());
-            page.setPages(newPage.getPages());
-            page.setTotal(newPage.getTotal());
+            springboot.wxcms.entity.Page  p = new springboot.wxcms.entity.Page();
+            p.setPageNum(newPage.getPageNum());
+            p.setPageSize(newPage.getPageSize());
+            p.setPages(newPage.getPages());
+            p.setTotal(newPage.getTotal());
+            page = p;
         }
         this.success = true;
-        this.date = t;
+        this.data = t;
         this.msg =Constants.MSG_SUCCESS;
         this.dateTime = LocalDateTime.now();
     }

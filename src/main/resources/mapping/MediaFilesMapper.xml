@@ -22,7 +22,7 @@
   <!-- 条件查询单条数据 -->
   <select id="getFileBySou" parameterType="springboot.wxcms.entity.MediaFiles"
           resultMap="BaseResultMap">
-    SELECT * FROM wxcms_media_files WHERE
+    SELECT * FROM media_files WHERE
     <where>
       1=1
       <if test="mediaId!=null and mediaId!='' ">
@@ -39,7 +39,7 @@
   </select>
   <!-- 模糊分页 -->
   <select id="getMediaListByPage" parameterType="springboot.wxcms.entity.MediaFiles" resultMap="BaseResultMap">
-    SELECT  t.* FROM wxcms_media_files t
+    SELECT  t.* FROM media_files t
     <where>
       1=1
       <if test="mediaType!=null and mediaType!='' ">

@@ -12,7 +12,7 @@
   </resultMap>
 
   <select id="getTplMsgTextByPage" parameterType="springboot.wxcms.entity.TplMsgText" resultMap="BaseResultMap">
-    SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_tpl_msg_text t , wxcms_msg_base b
+    SELECT b.msg_type ,b.input_code ,t.* FROM tpl_msg_text t , msg_base b
     WHERE t.base_id = b.id
     <if test="inputcode != '' and inputcode != null">
       and b.input_code=#{inputcode}
@@ -23,7 +23,7 @@
     ORDER BY b.create_time DESC
   </select>
   <select id="getTplMsgTextList" parameterType="springboot.wxcms.entity.TplMsgText" resultMap="BaseResultMap">
-    SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_tpl_msg_text t , wxcms_msg_base b
+    SELECT b.msg_type ,b.input_code ,t.* FROM tpl_msg_text t , msg_base b
     WHERE t.base_id = b.id
     <if test="inputcode != '' and inputcode != null">
       and b.input_code=#{inputcode}

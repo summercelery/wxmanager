@@ -6,12 +6,6 @@
                 <a href="https://admin.smartwx.info"  style="color: #fff;text-decoration: underline;">访问官网</a>
             </p>
         </blockquote>
-        <blockquote class="layui-elem-quote layui-bg-red hide" id="index-update" style="border: 0;">
-            <p>
-                系统已升级，请升级本系统，让我们将继续为您服务。
-                <a href="https://gitee.com/qingfengtaizi/wxmp"  style="color: #fff;text-decoration: underline;">马上升级</a>
-            </p>
-        </blockquote>
         <div class="layui-row layui-col-space10">
             <div class="layui-col-md6">
                 <div class="panel panel-default" style="min-height: 249px;">
@@ -33,10 +27,11 @@
                     </div>
                 </div>
             </div>
+
             <div class="layui-col-md6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">关于</div>
-                    <div class="panel-body">
+                <div class="panel panel-default" style="min-height: 249px;">
+                    <div class="panel-heading">版本信息</div>
+                    <div class="panel-body" id="index-version">
                         <table class="layui-table">
                             <colgroup>
                                 <col width="150">
@@ -44,31 +39,31 @@
                             </colgroup>
                             <tbody>
                             <tr>
-                                <td>技术支持：</td>
-                                <td><a href="http://www.webcsn.com">WebCsn（www.webcsn.com）</a></td>
+                                <td>系统支持</td>
+                                <td>wxmanager</td>
                             </tr>
                             <tr>
-                                <td>产品交流</td>
-                                <td><a href="http://www.webcsn.com">WebCsn（www.webcsn.com）</a></td>
+                                <td>当前版本</td>
+                                <td>1.0</td>
                             </tr>
                             <tr>
-                                <td>QQ交流群</td>
-                                <td><a href="https://jq.qq.com/?_wv=1027&k=5bGtRX8">普通群：671585861(学习交流，互相解答各种疑问)</a>
-                                </a>
-                                </td>
+                                <td>当前版本更新时间</td>
+                                <td>2018-11-26</td>
                             </tr>
                             <tr>
-                                <td>授权QQ</td>
-                                <td><a href="http://wpa.qq.com/msgrd?v=3&uin=1154808491&site=qq&menu=yes" target="_blank">
-                                1154808491
-                            </a></td>
+                                <td>最新版本</td>
+                                <td>1.0</td>
+                            </tr>
+                            <tr>
+                                <td>最新版本更新时间</td>
+                                <td>2018-11-26</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
+
         <div class="layui-row layui-col-space10">
             <div class="layui-col-md6">
                 <div class="panel panel-default">
@@ -153,75 +148,9 @@
                 </div>
             </div>
         </div>
-        <div class="layui-row layui-col-space10">
-            <div class="layui-col-md4">
-                <div class="panel panel-default" style="min-height: 285px;">
-                    <div class="panel-heading">二次开发</div>
-                    <div class="panel-body layui-text">
-                        <p>我们提供基于SmartWx的二次开发、模板定制服务，具体费用请联系我们。</p>
-                        <p>同时，我们也提供以下服务：</p>
-                        <ol>
-                            <li>网站定制开发</li>
-                            <li>仿站服务</li>
-                            <li>APP开发</li>
-                            <li>微信开发等</li>
-                            <li>......</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-col-md4">
-                <div class="panel panel-default" style="min-height: 285px;">
-                    <div class="panel-heading">商业授权说明</div>
-                    <div class="panel-body layui-text">
-                        <p>商业授权后我可以获得什么？</p>
-                        <ol>
-                            <li>可以用于商业网站</li>
-                            <li>可以去除本页面</li>
-                            <li>可以去除Powered by SmartWx</li>
-                            <li>获得更多功能；</li>
-                            <li>意见或建议优先考虑；</li>
-                            <li>提供技术服务支持；</li>
-                            <li>……</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-col-md4">
-                <div class="panel panel-default" style="min-height: 285px;">
-                    <div class="panel-heading">版本信息</div>
-                    <div class="panel-body" id="index-version">
-                        <table class="layui-table">
-                            <colgroup>
-                                <col width="150">
-                                <col>
-                            </colgroup>
-                            <tbody>
-                            <tr>
-                                <td>系统支持</td>
-                                <td>SmartWx</td>
-                            </tr>
-                            <tr>
-                                <td>当前版本</td>
-                                <td>2.0.0</td>
-                            </tr>
-                            <tr>
-                                <td>当前版本更新时间</td>
-                                <td>2018-04-15</td>
-                            </tr>
-                            <tr>
-                                <td>最新版本</td>
-                                <td>2.0.0</td>
-                            </tr>
-                            <tr>
-                                <td>最新版本更新时间</td>
-                                <td>2018-04-15</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+
+
+
         </div>
         </div>
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
@@ -298,42 +227,10 @@
                     systemName=result.data.systemName;
                     systemVersion=result.data.systemVersion;
                     systemUpdateTime=result.data.systemUpdateTime;
-                    checkUpdate();
                 }
             }
         });
 
-        function checkUpdate() {
-            $.getJSON("https://www.smartwx.info/newVersion?callback=?", function (result) {
-                if(systemVersion && result.LAST_SYSTEM_VERSION) {
-                    //渲染版本信息
-                    result.systemName=systemName;
-                    result.systemVersion=systemVersion;
-                    result.systemUpdateTime=systemUpdateTime;
-                    renderHtml({
-                        targetId: 'index-version',
-                        template: "version",
-                        htmlData: result,
-                    });
-                    var local = systemVersion.split(".");
-                    var last = result.LAST_SYSTEM_VERSION.split(".");
-                    if(hasnew(local[0],last[0])){
-                        newCallback();
-                    }else if(local[0]==last[0]){
-                        if(hasnew(local[1],last[1])){
-                            newCallback();
-                        }else if(local[1]==last[1] && hasnew(local[2],last[2])){
-                            newCallback();
-                        }
-                    }
-                }
-                function hasnew(a,b) {
-                    return parseInt(b)>parseInt(a)
-                }
-                function newCallback() {
-                    $("#index-update").removeClass("hide");
-                }
-            });
-        }
+
     });
 </script>

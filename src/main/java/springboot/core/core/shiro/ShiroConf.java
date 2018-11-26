@@ -83,19 +83,23 @@ public class ShiroConf {
         ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
         bean.setSecurityManager(manager);
         //配置登录的url和登录成功的url
-        bean.setLoginUrl("/login.html");
-        bean.setSuccessUrl("/home");
+        bean.setLoginUrl("/views/login.html");
+        bean.setSuccessUrl("/views/index.html");
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
-//        filterChainDefinitionMap.put("/login.html", "anon"); //表示可以匿名访问
+//        filterChainDefinitionMap.put("/static/views/**", "authc"); //表示可以匿名访问
+
+        filterChainDefinitionMap.put("/views/login.html", "anon"); //表示可以匿名访问
 //        filterChainDefinitionMap.put("/register.html", "anon");
 //        filterChainDefinitionMap.put("/loginUser", "anon");
 //        filterChainDefinitionMap.put("/logout*","anon");
 //        filterChainDefinitionMap.put("/jsp/error.jsp*","anon");
 //        filterChainDefinitionMap.put("/jsp/index.jsp*","authc");
-        filterChainDefinitionMap.put("/*", "anon");//表示需要认证才可以访问
-        filterChainDefinitionMap.put("/**", "anon");//"authc"表示需要认证才可以访问
-        filterChainDefinitionMap.put("/*.*", "anon");
+//        filterChainDefinitionMap.put("/*", "anon");//表示需要认证才可以访问
+        filterChainDefinitionMap.put("/views/**", "authc");//"authc"表示需要认证才可以访问
+
+//        filterChainDefinitionMap.put("/*.*", "anon");
+
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return bean;
     }

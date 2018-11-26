@@ -24,7 +24,7 @@
 
 
   <select id="getFansListByPage" resultMap="BaseResultMap">
-    SELECT * FROM wxcms_account_fans
+    SELECT * FROM account_fans
     <where>
       <if test="nicknameStr != null">
         nick_name LIKE concat('%',#{nicknameStr},'%')

@@ -1,6 +1,7 @@
 
 package springboot.wxcms.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class MsgTextController {
     @RequestMapping(value = "/list")
     public Result list(MsgText searchEntity) throws BusinessException {
         List<MsgText> pageList = msgTextService.getMsgTextByPage(searchEntity);
+
         return Result.ok(pageList);
     }
 

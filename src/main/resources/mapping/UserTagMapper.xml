@@ -9,7 +9,7 @@
   </resultMap>
 
   <select id="getUserTagListByPage" parameterType="springboot.wxcms.entity.UserTag" resultMap="BaseResultMap">
-    SELECT * FROM wxcms_user_tag
+    SELECT * FROM user_tag
     <trim prefix="where" prefixOverrides="and|or">
       1=1
       <if test="name != null and name != '' ">
@@ -20,7 +20,7 @@
   </select>
 
   <delete id="deleteBatchIds" parameterType="list">
-    DELETE FROM wxcms_user_tag WHERE ID IN
+    DELETE FROM user_tag WHERE ID IN
     <foreach collection="array"  item="item" open="(" separator="," close=")">
       #{item}
     </foreach>
