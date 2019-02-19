@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import springboot.core.spring.SpringFreemarkerContextPathUtil;
 import springboot.core.util.PropertiesConfigUtil;
+import springboot.core.util.UUIDUtil;
 import springboot.core.util.UploadUtil;
 import springboot.wxapi.process.MediaType;
 import springboot.wxapi.process.MpAccount;
@@ -77,9 +79,10 @@ public class WxCmsController {
 	public Result getUrl(Account account){
 		String url = "/wxapi/" + account.getAccount() + "/message.html";
 		
-		if(account.getId() == null){//新增
+		if(StringUtils.isBlank(account.getId())){//新增
+			account.setId(UUIDUtil.getUUID());
 			account.setUrl(url);
-			account.setToken(UUID.randomUUID().toString().replace("-", ""));
+			account.setToken(UUIDUtil.getUUID());
 			account.setCreateTime(LocalDateTime.now());
 			accountMapper.insert(account);
 		}else{//更新

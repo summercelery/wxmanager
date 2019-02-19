@@ -17,7 +17,6 @@ import java.util.Date;
 public abstract class BaseEntity extends Page{
 
     BaseEntity() {
-        this.id = UUIDUtil.getUUID();
         this.createTime = LocalDateTime.now();
     }
 

@@ -41,7 +41,7 @@ public class MsgArticleService {
 
 	public void update(MsgArticle article) {
 		// TODO Auto-generated method stub
-//		this.getById(article.getArId());
+//		this.getById(business.getArId());
 		if(article.getNewsIndex()==0){
 			MsgNews news = msgNewsMapper.selectByPrimaryKey(String.valueOf(article.getNewsId()));
 			news.setTitle(article.getTitle());
